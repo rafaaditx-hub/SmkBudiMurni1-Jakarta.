@@ -1,0 +1,8 @@
+{
+  "name": "SMK Budi Murni 1",
+  "description": "Website Resmi SMK Budi Murni 1 Jakarta Timur - Profil Sekolah, Program Keahlian, Jadwal Pelajaran TP 2026/2027, PPDB Online, dan BKK",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
