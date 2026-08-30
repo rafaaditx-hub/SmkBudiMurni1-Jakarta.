@@ -663,11 +663,20 @@ export const SchedulePage: React.FC = () => {
                 Dokumen Resmi: Jadwal Pelajaran TP. 2026-2027
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Dokumen resmi yang disahkan oleh Kepala SMK Budi Murni 1 dan Waka Kurikulum.
+                Dokumen resmi disahkan oleh Kepala SMK Budi Murni 1 (Budiman Sitorus, SE) dan Waka Kurikulum (Wirwan Rizon, S.Kom).
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href="/assets/images/jadwal-scan.jpg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg flex items-center gap-1.5"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>Buka Scan Foto</span>
+              </a>
               <a
                 href="/docs/jadwal-pelajaran-2026-2027.pdf"
                 target="_blank"
@@ -675,12 +684,12 @@ export const SchedulePage: React.FC = () => {
                 className="px-3 py-2 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center gap-1.5"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
-                <span>Buka di Tab Baru</span>
+                <span>Buka PDF di Tab Baru</span>
               </a>
               <a
                 href="/docs/jadwal-pelajaran-2026-2027.pdf"
                 download="Jadwal-Pelajaran-SMK-Budi-Murni-1-TP-2026-2027.pdf"
-                className="px-3 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center gap-1.5"
+                className="px-3 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center gap-1.5 shadow-sm"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Unduh File PDF</span>
@@ -688,12 +697,37 @@ export const SchedulePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full h-[650px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
-            <iframe
-              src="/docs/jadwal-pelajaran-2026-2027.pdf"
-              title="Pratinjau Jadwal Pelajaran TP 2026-2027"
-              className="w-full h-full"
-            />
+          {/* High-Resolution Scan Display */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                Lembar Scan Asli Jadwal Pelajaran (CamScanner):
+              </span>
+              <span className="text-[11px] text-slate-400">
+                Klik gambar untuk memperbesar resolusi penuh
+              </span>
+            </div>
+
+            <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 p-2 shadow-inner">
+              <a 
+                href="/assets/images/jadwal-scan.jpg" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Klik untuk membuka scan resolusi tinggi"
+                className="block group relative overflow-auto max-h-[700px]"
+              >
+                <img
+                  src="/assets/images/jadwal-scan.jpg"
+                  alt="Scan Lembar Jadwal Pelajaran SMK Budi Murni 1 TP 2026-2027"
+                  className="w-full object-contain rounded-xl transition-transform duration-300 group-hover:scale-[1.01]"
+                />
+                <div className="absolute bottom-3 right-3 bg-slate-900/80 text-white text-xs px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5">
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Perbesar Scan Asli</span>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       )}

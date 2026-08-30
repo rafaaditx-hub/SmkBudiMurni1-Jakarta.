@@ -34,3 +34,308 @@
 .animate-pulse-subtle {
   animation: pulse-subtle 4s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   DYNAMIC THEME ENGINE (DEFAULT: MERAH / RED BUDI MURNI)
+   ========================================================================== */
+
+:root {
+  --theme-primary: #dc2626;
+  --theme-primary-hover: #b91c1c;
+  --theme-secondary: #f59e0b;
+  --theme-primary-light: #fef2f2;
+  --theme-primary-border: #fecaca;
+}
+
+/* Default & 'merah' theme mapping */
+:root,
+[data-theme="merah"] {
+  --theme-primary: #dc2626;
+  --theme-primary-hover: #b91c1c;
+  --theme-secondary: #f59e0b;
+  --theme-primary-light: #fef2f2;
+  --theme-primary-border: #fecaca;
+}
+
+/* Apply Red as default to primary brand classes */
+:root .bg-blue-600,
+[data-theme="merah"] .bg-blue-600,
+:root .bg-blue-700,
+[data-theme="merah"] .bg-blue-700 {
+  background-color: #dc2626 !important;
+}
+
+:root .hover\:bg-blue-700:hover,
+[data-theme="merah"] .hover\:bg-blue-700:hover,
+:root .hover\:bg-blue-600:hover,
+[data-theme="merah"] .hover\:bg-blue-600:hover,
+:root .hover\:bg-blue-500:hover,
+[data-theme="merah"] .hover\:bg-blue-500:hover {
+  background-color: #b91c1c !important;
+}
+
+:root .text-blue-600,
+[data-theme="merah"] .text-blue-600,
+:root .text-blue-700,
+[data-theme="merah"] .text-blue-700,
+:root .text-blue-800,
+[data-theme="merah"] .text-blue-800 {
+  color: #dc2626 !important;
+}
+
+:root .hover\:text-blue-600:hover,
+[data-theme="merah"] .hover\:text-blue-600:hover,
+:root .hover\:text-blue-700:hover,
+[data-theme="merah"] .hover\:text-blue-700:hover {
+  color: #b91c1c !important;
+}
+
+:root .bg-blue-50,
+[data-theme="merah"] .bg-blue-50 {
+  background-color: #fef2f2 !important;
+}
+
+:root .bg-blue-100,
+[data-theme="merah"] .bg-blue-100 {
+  background-color: #fee2e2 !important;
+}
+
+:root .text-blue-900,
+[data-theme="merah"] .text-blue-900 {
+  color: #7f1d1d !important;
+}
+
+:root .border-blue-200,
+[data-theme="merah"] .border-blue-200,
+:root .border-blue-300,
+[data-theme="merah"] .border-blue-300 {
+  border-color: #fecaca !important;
+}
+
+:root .border-blue-500,
+[data-theme="merah"] .border-blue-500,
+:root .border-blue-600,
+[data-theme="merah"] .border-blue-600 {
+  border-color: #dc2626 !important;
+}
+
+:root .hover\:border-blue-300:hover,
+[data-theme="merah"] .hover\:border-blue-300:hover,
+:root .hover\:border-blue-400:hover,
+[data-theme="merah"] .hover\:border-blue-400:hover {
+  border-color: #f87171 !important;
+}
+
+:root .from-blue-600,
+[data-theme="merah"] .from-blue-600,
+:root .from-blue-700,
+[data-theme="merah"] .from-blue-700 {
+  --tw-gradient-from: #b91c1c var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+:root .to-indigo-800,
+[data-theme="merah"] .to-indigo-800,
+:root .to-blue-800,
+[data-theme="merah"] .to-blue-800,
+:root .to-blue-950,
+[data-theme="merah"] .to-blue-950 {
+  --tw-gradient-to: #450a0a var(--tw-gradient-to-position) !important;
+}
+
+:root .via-blue-950,
+[data-theme="merah"] .via-blue-950 {
+  --tw-gradient-stops: var(--tw-gradient-from), #7f1d1d var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+/* ==========================================
+   THEME: BIRU BAHARI KLASIK
+   ========================================== */
+[data-theme="biru"] .bg-blue-600 {
+  background-color: #2563eb !important;
+}
+[data-theme="biru"] .hover\:bg-blue-700:hover {
+  background-color: #1d4ed8 !important;
+}
+[data-theme="biru"] .text-blue-600,
+[data-theme="biru"] .text-blue-700 {
+  color: #2563eb !important;
+}
+[data-theme="biru"] .bg-blue-50 {
+  background-color: #eff6ff !important;
+}
+[data-theme="biru"] .border-blue-200 {
+  border-color: #bfdbfe !important;
+}
+[data-theme="biru"] .from-blue-600,
+[data-theme="biru"] .from-blue-700 {
+  --tw-gradient-from: #1d4ed8 var(--tw-gradient-from-position) !important;
+}
+[data-theme="biru"] .to-indigo-800,
+[data-theme="biru"] .to-blue-800 {
+  --tw-gradient-to: #1e1b4b var(--tw-gradient-to-position) !important;
+}
+
+/* ==========================================
+   THEME: GABUNG MERAH & BIRU (DUAL HYBRID)
+   ========================================== */
+[data-theme="gabung-merah-biru"] .bg-blue-600 {
+  background-color: #dc2626 !important;
+}
+[data-theme="gabung-merah-biru"] .hover\:bg-blue-700:hover {
+  background-color: #b91c1c !important;
+}
+[data-theme="gabung-merah-biru"] .text-blue-600,
+[data-theme="gabung-merah-biru"] .text-blue-700 {
+  color: #dc2626 !important;
+}
+[data-theme="gabung-merah-biru"] .bg-blue-50 {
+  background-color: #fef2f2 !important;
+}
+[data-theme="gabung-merah-biru"] .border-blue-200 {
+  border-color: #bfdbfe !important;
+}
+[data-theme="gabung-merah-biru"] .from-blue-600,
+[data-theme="gabung-merah-biru"] .from-blue-700 {
+  --tw-gradient-from: #dc2626 var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme="gabung-merah-biru"] .to-indigo-800,
+[data-theme="gabung-merah-biru"] .to-blue-800 {
+  --tw-gradient-to: #1e3a8a var(--tw-gradient-to-position) !important;
+}
+[data-theme="gabung-merah-biru"] .via-blue-950 {
+  --tw-gradient-stops: var(--tw-gradient-from), #1e1b4b var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+/* ==========================================
+   THEME: GABUNG MERAH & EMAS
+   ========================================== */
+[data-theme="gabung-merah-emas"] .bg-blue-600 {
+  background-color: #dc2626 !important;
+}
+[data-theme="gabung-merah-emas"] .hover\:bg-blue-700:hover {
+  background-color: #b91c1c !important;
+}
+[data-theme="gabung-merah-emas"] .text-blue-600,
+[data-theme="gabung-merah-emas"] .text-blue-700 {
+  color: #dc2626 !important;
+}
+[data-theme="gabung-merah-emas"] .bg-blue-50 {
+  background-color: #fef2f2 !important;
+}
+[data-theme="gabung-merah-emas"] .border-blue-200 {
+  border-color: #fef08a !important;
+}
+[data-theme="gabung-merah-emas"] .from-blue-600,
+[data-theme="gabung-merah-emas"] .from-blue-700 {
+  --tw-gradient-from: #991b1b var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme="gabung-merah-emas"] .to-indigo-800,
+[data-theme="gabung-merah-emas"] .to-blue-800 {
+  --tw-gradient-to: #78350f var(--tw-gradient-to-position) !important;
+}
+
+/* ==========================================
+   THEME: EMERALD / HIJAU VOKASI
+   ========================================== */
+[data-theme="emerald"] .bg-blue-600,
+[data-theme="emerald"] .bg-blue-700 {
+  background-color: #059669 !important;
+}
+[data-theme="emerald"] .hover\:bg-blue-700:hover {
+  background-color: #047857 !important;
+}
+[data-theme="emerald"] .text-blue-600,
+[data-theme="emerald"] .text-blue-700,
+[data-theme="emerald"] .text-blue-800 {
+  color: #059669 !important;
+}
+[data-theme="emerald"] .bg-blue-50 {
+  background-color: #ecfdf5 !important;
+}
+[data-theme="emerald"] .bg-blue-100 {
+  background-color: #d1fae5 !important;
+}
+[data-theme="emerald"] .border-blue-200,
+[data-theme="emerald"] .border-blue-300 {
+  border-color: #a7f3d0 !important;
+}
+[data-theme="emerald"] .from-blue-600,
+[data-theme="emerald"] .from-blue-700 {
+  --tw-gradient-from: #065f46 var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme="emerald"] .to-indigo-800,
+[data-theme="emerald"] .to-blue-800 {
+  --tw-gradient-to: #0f172a var(--tw-gradient-to-position) !important;
+}
+
+/* ==========================================
+   THEME: UNGU ELEGAN
+   ========================================== */
+[data-theme="ungu"] .bg-blue-600,
+[data-theme="ungu"] .bg-blue-700 {
+  background-color: #7c3aed !important;
+}
+[data-theme="ungu"] .hover\:bg-blue-700:hover {
+  background-color: #6d28d9 !important;
+}
+[data-theme="ungu"] .text-blue-600,
+[data-theme="ungu"] .text-blue-700,
+[data-theme="ungu"] .text-blue-800 {
+  color: #7c3aed !important;
+}
+[data-theme="ungu"] .bg-blue-50 {
+  background-color: #f5f3ff !important;
+}
+[data-theme="ungu"] .bg-blue-100 {
+  background-color: #ede9fe !important;
+}
+[data-theme="ungu"] .border-blue-200,
+[data-theme="ungu"] .border-blue-300 {
+  border-color: #ddd6fe !important;
+}
+[data-theme="ungu"] .from-blue-600,
+[data-theme="ungu"] .from-blue-700 {
+  --tw-gradient-from: #6d28d9 var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme="ungu"] .to-indigo-800,
+[data-theme="ungu"] .to-blue-800 {
+  --tw-gradient-to: #31104b var(--tw-gradient-to-position) !important;
+}
+
+/* ==========================================
+   THEME: CUSTOM PICKER
+   ========================================== */
+[data-theme="custom"] .bg-blue-600,
+[data-theme="custom"] .bg-blue-700 {
+  background-color: var(--theme-primary, #dc2626) !important;
+}
+[data-theme="custom"] .hover\:bg-blue-700:hover,
+[data-theme="custom"] .hover\:bg-blue-600:hover {
+  background-color: var(--theme-primary-hover, #b91c1c) !important;
+}
+[data-theme="custom"] .text-blue-600,
+[data-theme="custom"] .text-blue-700,
+[data-theme="custom"] .text-blue-800 {
+  color: var(--theme-primary, #dc2626) !important;
+}
+[data-theme="custom"] .bg-blue-50 {
+  background-color: var(--theme-primary-light, #fef2f2) !important;
+}
+[data-theme="custom"] .border-blue-200 {
+  border-color: var(--theme-primary-border, #fecaca) !important;
+}
+[data-theme="custom"] .from-blue-600,
+[data-theme="custom"] .from-blue-700 {
+  --tw-gradient-from: var(--theme-primary, #dc2626) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme="custom"] .to-indigo-800,
+[data-theme="custom"] .to-blue-800 {
+  --tw-gradient-to: var(--theme-secondary, #2563eb) !important;
+}
+

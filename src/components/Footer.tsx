@@ -147,8 +147,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </button>
               </li>
               <li>
+                <button onClick={() => onNavigate('tka')} className="hover:text-blue-400 transition-colors font-semibold text-blue-400">
+                  • TKA Kemendikdasmen
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onNavigate('kesiswaan')} className="hover:text-blue-400 transition-colors">
-                  • Kesiswaan, Ekskul & OSIS
+                  • Kesiswaan & Ekskul
                 </button>
               </li>
               <li>

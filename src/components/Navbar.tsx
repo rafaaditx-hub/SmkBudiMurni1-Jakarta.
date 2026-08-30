@@ -17,10 +17,12 @@ import {
   Building2,
   Cpu,
   Trophy,
-  Newspaper
+  Newspaper,
+  Palette
 } from 'lucide-react';
 import { SCHOOL_INFO } from '../data/schoolData';
 import { UserProfile } from '../lib/supabase';
+import { useTheme } from '../context/ThemeContext';
 
 interface NavbarProps {
   activeTab: string;
@@ -41,6 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { openSettings, theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,16 +53,18 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Requested Nav items: Beranda, Tentang, Program, Fasilitas, Berita, Jadwal, Kesiswaan, BKK, Portal, PPDB, Kontak
+  // Requested Nav items: Beranda, Tentang, Program, Fasilitas, Jadwal, Portal, Kesiswaan, BKK, TKA Kemendikdasmen, Berita, Kontak
   const navLinks = [
     { id: 'beranda', label: 'Beranda' },
     { id: 'tentang', label: 'Tentang' },
     { id: 'program', label: 'Program' },
     { id: 'fasilitas', label: 'Fasilitas' },
     { id: 'jadwal', label: 'Jadwal Pelajaran', badge: 'PDF' },
-    { id: 'portal', label: 'Portal Siswa & Guru', badge: 'Wajib Login' },
+    { id: 'portal', label: 'Portal Siswa & Guru', badge: 'Login' },
     { id: 'kesiswaan', label: 'Kesiswaan' },
+    { id: 'tatatertib', label: 'Tata Tertib' },
     { id: 'bkk', label: 'BKK & Alumni' },
+    { id: 'tka', label: 'TKA Kemendikdasmen', badge: 'Resmi' },
     { id: 'berita', label: 'Berita' },
     { id: 'kontak', label: 'Kontak' },
   ];
@@ -168,8 +173,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </div>
 
-          {/* Action CTAs: PPDB & Supabase Auth Portal */}
-          <div className="hidden sm:flex items-center space-x-2.5">
+          {/* Action CTAs: Theme Switcher, PPDB & Supabase Auth Portal */}
+          <div className="hidden sm:flex items-center space-x-2">
+            {/* Theme Settings Button */}
+            <button
+              id="header-theme-settings-btn"
+              onClick={openSettings}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-red-50 hover:text-red-600 border border-slate-200 transition-all group"
+              title="Pengaturan Tema & Warna (Default: Merah)"
+            >
+              <Palette className="w-3.5 h-3.5 text-red-600 group-hover:rotate-45 transition-transform" />
+              <span className="hidden xl:inline capitalize">{theme === 'merah' ? 'Warna Merah' : theme}</span>
+            </button>
+
             {/* Supabase User / Login Button */}
             {currentUser ? (
               <button
@@ -207,7 +223,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Mobile Menu & Auth Shortcuts */}
-          <div className="flex lg:hidden items-center space-x-2">
+          <div className="flex lg:hidden items-center space-x-1.5">
+            <button
+              id="mobile-theme-btn"
+              onClick={openSettings}
+              className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-xs font-bold"
+              title="Pengaturan Warna"
+            >
+              <Palette className="w-4 h-4" />
+            </button>
+
             <button
               id="mobile-auth-shortcut-btn"
               onClick={onOpenAuthModal}
@@ -267,6 +292,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               })}
 
               <div className="pt-3 mt-2 border-t border-slate-100 space-y-2">
+                <button
+                  id="mobile-drawer-theme-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openSettings();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 font-bold rounded-xl text-xs transition-colors border border-red-200"
+                >
+                  <Palette className="w-4 h-4 text-red-600" />
+                  <span>Pengaturan Tema & Warna ({theme})</span>
+                </button>
+
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);

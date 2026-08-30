@@ -9,34 +9,35 @@ import {
   Wrench, 
   Zap, 
   Bike,
-  Sparkles,
-  Phone,
-  GraduationCap,
-  ShieldCheck,
-  MapPin
+  Sparkles, 
+  Phone, 
+  GraduationCap, 
+  ShieldCheck, 
+  MapPin, 
+  Calendar, 
+  Download, 
+  Building2, 
+  ChevronRight,
+  Clock,
+  Newspaper,
+  BookOpen,
+  HelpCircle,
+  TrendingUp,
+  Target
 } from 'lucide-react';
-import { SCHOOL_INFO, MAJORS } from '../data/schoolData';
+import { SCHOOL_INFO, NEWS_ARTICLES, NewsItem } from '../data/schoolData';
+import { PrincipalAvatar } from '../components/PrincipalAvatar';
 
 interface HomePageProps {
   onNavigate: (tab: string) => void;
   onSelectMajor: (majorId: string) => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor }) => {
-  const getMajorIcon = (code: string) => {
-    switch (code) {
-      case 'TKJ': return <Cpu className="w-5 h-5" />;
-      case 'TKR': return <Wrench className="w-5 h-5" />;
-      case 'TITL': return <Zap className="w-5 h-5" />;
-      case 'TBSM': return <Bike className="w-5 h-5" />;
-      default: return <GraduationCap className="w-5 h-5" />;
-    }
-  };
-
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   return (
-    <div className="space-y-16 lg:space-y-24 pb-12">
+    <div className="space-y-16 lg:space-y-24 pb-16">
       
-      {/* 1. HERO SECTION */}
+      {/* 1. HERO SECTION (SELAMAT DATANG DI SMK BUDI MURNI 1) */}
       <section className="relative overflow-hidden bg-slate-900 text-white">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
@@ -59,21 +60,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-600/90 text-white border border-emerald-400/30 backdrop-blur-sm">
                 <Sparkles className="w-3.5 h-3.5" />
-                PPDB 2026/2027 Dibuka
+                PPDB TP 2026/2027 Dibuka
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700 backdrop-blur-sm">
-                Jakarta Timur
+                NPSN: {SCHOOL_INFO.npsn}
               </span>
             </div>
 
             {/* Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Pusat Pendidikan Vokasi Unggulan & Siap Kerja di Jakarta Timur
+              Pusat Pendidikan Vokasi Unggulan & Berkarakter di Jakarta Timur
             </h1>
 
             {/* Description */}
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-              SMK Budi Murni 1 menyiapkan peserta didik dengan keahlian teknologi terkini di bidang <strong>Jaringan Komputer (TKJ)</strong>, <strong>Otomotif Roda 4 (TKR)</strong>, <strong>Listrik Industri (TITL)</strong>, dan <strong>Sepeda Motor (TBSM)</strong> dengan kurikulum berbasis industri dan penyaluran kerja terpercaya.
+              Selamat datang di portal resmi <strong>SMK Budi Murni 1 Jakarta</strong>. Kami berkomitmen mencetak lulusan berdaya saing global melalui pembelajaran terintegrasi industri modern, penguatan karakter akhlak mulia, dan sertifikasi kompetensi nasional.
             </p>
 
             {/* Action Buttons */}
@@ -83,7 +84,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
                 onClick={() => onNavigate('ppdb')}
                 className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30 hover:shadow-xl transition-all transform active:scale-95"
               >
-                <span>Daftar PPDB Online 2026/2027</span>
+                <span>Pendaftaran PPDB 2026/2027</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -93,30 +94,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
                 className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-slate-200 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 backdrop-blur-sm hover:text-white transition-all"
               >
                 <Calendar className="w-4 h-4 text-amber-400" />
-                <span>Lihat Jadwal Pelajaran TP 2026-2027</span>
+                <span>Jadwal Pelajaran TP 2026-2027</span>
               </button>
-
-              <a
-                id="hero-download-pdf-btn"
-                href="/docs/jadwal-pelajaran-2026-2027.pdf"
-                download="Jadwal-Pelajaran-SMK-Budi-Murni-1-TP-2026-2027.pdf"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-medium text-xs text-slate-300 bg-white/10 hover:bg-white/20 border border-white/15 backdrop-blur-sm transition-colors"
-                title="Unduh Dokumen PDF Jadwal Resmi"
-              >
-                <Download className="w-4 h-4 text-emerald-400" />
-                <span>Unduh PDF Jadwal</span>
-              </a>
             </div>
 
             {/* Quick feature pill row */}
             <div className="pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-slate-300">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Sertifikasi BNSP / LSP</span>
+                <span>Kurikulum Merdeka Vokasi</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Teaching Factory</span>
+                <span>Sertifikasi BNSP / LSP</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -124,7 +114,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Beasiswa Berprestasi</span>
+                <span>Teaching Factory Modern</span>
               </div>
             </div>
 
@@ -152,7 +142,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
         </div>
       </section>
 
-      {/* 3. SAMBUTAN KEPALA SEKOLAH & PROFIL SINGKAT */}
+      {/* 3. SAMBUTAN RESMI KEPALA SEKOLAH (DENGAN FOTO ASLI BUDIMAN SITORUS, SE) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl p-6 sm:p-10 lg:p-12 border border-slate-100 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
@@ -175,7 +165,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
             </div>
 
             {/* Floating Accreditation Badge */}
-            <div className="absolute -bottom-3 sm:-bottom-4 -right-2 sm:-right-4 lg:-right-6 bg-blue-700 text-white px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl shadow-xl border-2 border-white flex items-center gap-2.5 z-10">
+            <div className="absolute -bottom-3 sm:-bottom-4 -right-2 sm:-right-4 lg:-right-6 bg-blue-700 text-white px-3.5 py-2.5 rounded-xl shadow-xl border-2 border-white flex items-center gap-2.5 z-10">
               <Award className="w-5 h-5 sm:w-6 sm:h-6 text-amber-300 shrink-0" />
               <div>
                 <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-200 leading-tight">Status Akreditasi</div>
@@ -200,22 +190,25 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
                 <em>Assalamu’alaikum Warahmatullahi Wabarakatuh, Salam Sejahtera untuk kita semua.</em>
               </p>
               <p>
-                Selamat datang di website resmi <strong>SMK Budi Murni 1 Jakarta</strong>. Sebagai salah satu lembaga pendidikan kejuruan terdepan, kami berkomitmen teguh menyelaraskan pendidikan vokasi dengan perkembangan industri modern melalui integrasi kurikulum berbasis kompetensi, workshop terstandarisasi industri, dan pembentukan karakter integritas tinggi.
+                Selamat datang di website resmi <strong>SMK Budi Murni 1 Jakarta</strong>. Sebagai lembaga pendidikan vokasi terdepan di Jakarta Timur, kami terus berkomitmen menghadirkan ekosistem belajar yang adaptif terhadap transformasi industri global.
               </p>
               <p>
-                Dengan 4 konsentrasi keahlian unggulan (TKJ, TKR, TITL, TBSM), kami terus memperluas jaringan kerjasama dengan dunia usaha dan dunia industri (DUDI) untuk menjamin kualitas lulusan yang langsung terserap di dunia kerja, berjiwa wirausaha tangguh, maupun melanjutkan studi ke jenjang perguruan tinggi.
+                Melalui penguatan budaya kerja industri, sarana laboratorium terstandarisasi, serta pembinaan karakter profil Pelajar Pancasila, kami mendidik setiap peserta didik agar memiliki kompetensi teknis yang unggul, berintegritas tinggi, dan siap diserap oleh dunia usaha maupun melanjutkan ke jenjang perguruan tinggi.
               </p>
             </div>
 
             {/* Principal Signature Info */}
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <div>
-                <h4 className="font-extrabold text-slate-900 text-base sm:text-lg">Budiman Sitorus, SE.</h4>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Kepala Sekolah SMK Budi Murni 1 Jakarta</p>
+            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <PrincipalAvatar size="lg" showBadge={true} />
+                <div>
+                  <h4 className="font-extrabold text-slate-900 text-base sm:text-lg">Budiman Sitorus, SE.</h4>
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Kepala Sekolah SMK Budi Murni 1 Jakarta</p>
+                </div>
               </div>
               <button
                 id="home-learn-profile-btn"
-                onClick={() => onNavigate('profil')}
+                onClick={() => onNavigate('tentang')}
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 group"
               >
                 <span>Lihat Profil Lengkap</span>
@@ -228,188 +221,289 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
         </div>
       </section>
 
-      {/* 4. PROGRAM KEAHLIAN / JURUSAN UNGGULAN */}
+      {/* 4. NILAI UTAMA SEKOLAH (4 PILAR KARAKTER VOKASI) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
           <span className="text-xs font-bold tracking-wider uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-            Kompetensi Keahlian
+            Prinsip Pendidikan
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            4 Program Keahlian Standar Industri 4.0
+            4 Pilar Keunggulan Peserta Didik Budi Murni
           </h2>
           <p className="text-sm text-slate-600">
-            Didukung bengkel praktik modern, instruktur berpengalaman dari dunia industri, dan sertifikasi BNSP resmi.
+            Fondasi komprehensif yang ditanamkan dalam setiap proses kegiatan belajar mengajar di SMK Budi Murni 1.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {MAJORS.map((major) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-blue-300 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <h3 className="font-extrabold text-slate-900 text-lg">Cerdas (Intelektual)</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Memiliki pemikiran kritis, penalaran kuantitatif terapan, dan daya analisis problem solving sesuai standar asesmen nasional Kemendikdasmen.
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-emerald-300 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <Cpu className="w-6 h-6" />
+            </div>
+            <h3 className="font-extrabold text-slate-900 text-lg">Terampil (Vokasi)</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Mampu mengoperasikan perangkat, mesin, dan sistem berstandar industri dengan sertifikasi lisensi BNSP / LSP-P1 resmi.
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-indigo-300 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <h3 className="font-extrabold text-slate-900 text-lg">Berkarakter (Integritas)</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Menjunjung tinggi kejujuran, disiplin kerja 5R (Ringkas, Rapi, Resik, Rawat, Rajin), serta norma sopan santun dan toleransi.
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-amber-300 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+              <Briefcase className="w-6 h-6" />
+            </div>
+            <h3 className="font-extrabold text-slate-900 text-lg">Siap Kerja (DUDI)</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Tersambung langsung dengan 65+ mitra industri terpercaya melalui Bursa Kerja Khusus (BKK) dan program magang PKL bersertifikat.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. PENGUMUMAN & BERITA TERKINI SEKOLAH */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <span className="text-xs font-bold tracking-wider uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+              Pembaruan Resmi
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1.5">
+              Berita & Pengumuman Sekolah Terbaru
+            </h2>
+          </div>
+          <button
+            onClick={() => onNavigate('berita')}
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800"
+          >
+            <span>Semua Berita & Galeri</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {NEWS_ARTICLES.slice(0, 3).map((item: NewsItem) => (
             <div 
-              key={major.id}
-              id={`card-major-${major.id}`}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+              key={item.id}
+              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
             >
-              {/* Photo Header */}
-              <div className="relative h-64 sm:h-72 overflow-hidden bg-slate-100">
-                <img 
-                  src={major.image} 
-                  alt={major.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  onError={(e) => {
-                    // Fallback to building image if specific major image fails
-                    e.currentTarget.src = '/assets/images/gedung-sekolah.jpg';
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent" />
-                
-                {/* Badge Code */}
-                <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-blue-600 text-white shadow-md flex items-center gap-1.5">
-                    {getMajorIcon(major.code)}
-                    {major.code}
+              <div className="space-y-3 p-6">
+                <div className="flex items-center justify-between text-xs text-slate-500">
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold">
+                    {item.category}
                   </span>
+                  <span className="font-mono">{item.date}</span>
                 </div>
-
-                {/* Major Title inside photo */}
-                <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5">
-                  <h3 className="text-white font-extrabold text-lg sm:text-xl leading-snug group-hover:text-blue-200 transition-colors">
-                    {major.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-200 line-clamp-2 mt-1.5 leading-relaxed font-medium">
-                    {major.tagline}
-                  </p>
-                </div>
-              </div>
-
-              {/* Card Body */}
-              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-5">
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {major.description}
+                <h3 className="font-extrabold text-slate-900 text-base leading-snug line-clamp-2">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                  {item.summary}
                 </p>
-
-                {/* Key Competencies Chips */}
-                <div className="space-y-2.5">
-                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kompetensi Utama:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {major.competencies.slice(0, 3).map((comp, cIdx) => (
-                      <span key={cIdx} className="text-xs px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-medium">
-                        {comp}
-                      </span>
-                    ))}
-                    {major.competencies.length > 3 && (
-                      <span className="text-xs px-2.5 py-1 rounded-xl bg-blue-50 text-blue-700 font-bold">
-                        +{major.competencies.length - 3} lainnya
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Industry Partners preview */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <div className="text-xs text-slate-500">
-                    <span className="font-semibold text-slate-700">Mitra:</span> {major.industryPartners[0]}
-                  </div>
-
-                  <button
-                    id={`btn-detail-major-${major.id}`}
-                    onClick={() => {
-                      onSelectMajor(major.id);
-                      onNavigate('jurusan');
-                    }}
-                    className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
-                  >
-                    <span>Detail Jurusan</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
+              </div>
+              <div className="p-6 pt-0">
+                <button
+                  onClick={() => onNavigate('berita')}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+                >
+                  <span>Baca Selengkapnya</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 5. KEUNGGULAN SEKOLAH & TEACHING FACTORY */}
+      {/* 6. PUSAT NAVIGASI LAYANAN TERPISAH (CLEAN DIRECT ROUTING) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
           <span className="text-xs font-bold tracking-wider uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-            Kenapa Memilih Kami?
+            Eksplorasi Informasi
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Keunggulan Belajar di SMK Budi Murni 1
+            Pusat Layanan & Informasi Resmi
           </h2>
           <p className="text-sm text-slate-600">
-            Fasilitas komprehensif, budaya disiplin, dan lingkungan edukatif yang siap mengantarkan siswa menuju kesuksesan.
+            Setiap informasi tersaji terstruktur dan terpisah sesuai kebutuhan Anda tanpa pencampuran konten.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-7 rounded-3xl border border-slate-100 shadow-sm hover:border-blue-200 transition-all space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-              <Cpu className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-slate-900 text-lg">Teaching Factory & Lab Modern</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Suasana belajar didesain menyerupai lingkungan kerja industri nyata. Siswa membiasakan diri dengan standar operasional prosedur (SOP) perusahaan sejak kelas X.
-            </p>
-          </div>
-
-          <div className="bg-white p-7 rounded-3xl border border-slate-100 shadow-sm hover:border-blue-200 transition-all space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              <Briefcase className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-slate-900 text-lg">Bursa Kerja Khusus (BKK) Aktif</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Layanan rekrutmen kerja kampus berkala sebelum kelulusan bekerjasama dengan 65+ mitra industri terpercaya di kawasan industri Jakarta, Bekasi, Karawang, dan Jabodetabek.
-            </p>
-          </div>
-
-          <div className="bg-white p-7 rounded-3xl border border-slate-100 shadow-sm hover:border-blue-200 transition-all space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-              <Award className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-slate-900 text-lg">Sertifikasi BNSP & LSP-P1</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Seluruh siswa dibekali sertifikat kompetensi resmi berlisensi Badan Nasional Sertifikasi Profesi (BNSP) yang diakui secara nasional maupun internasional.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. MITRA INDUSTRI DUDI */}
-      <section className="bg-slate-100 py-14 border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-8 space-y-1">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500">
-              Jaringan Kemitraan Strategis
-            </h3>
-            <p className="text-lg font-bold text-slate-900">
-              Bekerjasama dengan 65+ Perusahaan Multinasional & BUMN
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { name: 'Astra Honda Motor', category: 'Otomotif Roda 2' },
-              { name: 'Auto2000 (Toyota)', category: 'Otomotif Roda 4' },
-              { name: 'PT Telkom Indonesia', category: 'Telekomunikasi & IT' },
-              { name: 'PT PLN (Persero)', category: 'Kelistrikan Energi' },
-              { name: 'Yamaha Motor Mfg', category: 'Otomotif Roda 2' },
-              { name: 'Schneider Electric', category: 'Otomasi Industri' },
-            ].map((partner, pIdx) => (
-              <div 
-                key={pIdx} 
-                className="bg-white rounded-2xl p-4 text-center border border-slate-200/80 shadow-xs flex flex-col justify-center items-center h-24 hover:border-blue-400 transition-colors"
-              >
-                <span className="font-extrabold text-xs text-slate-800">{partner.name}</span>
-                <span className="text-[10px] text-slate-500 mt-1">{partner.category}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Card 1: Profil Sekolah */}
+          <button
+            onClick={() => onNavigate('tentang')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Building2 className="w-5 h-5" />
               </div>
-            ))}
-          </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Tentang & Profil Sekolah</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Visi, misi, sejarah pendirian, dewan guru & tenaga kependidikan, serta legalitas akreditasi A.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-blue-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 2: Program Keahlian */}
+          <button
+            onClick={() => onNavigate('program')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Cpu className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Program Keahlian (4 Jurusan)</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Detail kompetensi keahlian TKJ, TKR, TITL, dan TBSM lengkap dengan kurikulum dan prospek kerja.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-blue-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 3: Fasilitas */}
+          <button
+            onClick={() => onNavigate('fasilitas')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Wrench className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Fasilitas Sarana Prasarana</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Bengkel otomotif, lab komputer jaringan, lab kelistrikan, ruang kelas multimedia, dan lapangan.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-blue-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 4: Jadwal Pelajaran */}
+          <button
+            onClick={() => onNavigate('jadwal')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Jadwal Pelajaran TP 2026/2027</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Jadwal resmi KBM per hari dan kelas, pengampu guru, jam belajar, dan unduh scan PDF resmi.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-blue-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 5: Layanan Portal */}
+          <button
+            onClick={() => onNavigate('portal')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                <Users className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Layanan Portal Sekolah</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Pendaftaran PPDB, info lowongan kerja BKK, cek bantuan PIP/KJP, konseling BK, dan helpdesk.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-indigo-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 6: Kesiswaan */}
+          <button
+            onClick={() => onNavigate('kesiswaan')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                <Award className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Kesiswaan & Ekstrakurikuler</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Organisasi OSIS, seluruh ekstrakurikuler wajib & pilihan, pembinaan karakter, dan galeri prestasi.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-amber-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 7: Tata Tertib */}
+          <button
+            onClick={() => onNavigate('tatatertib')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-red-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold group-hover:bg-red-600 group-hover:text-white transition-colors">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">Tata Tertib Siswa TP 2026/2027</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Keputusan resmi Yayasan Budi Murni Jakarta mengenai aturan kehadiran, seragam, etika 5S, larangan keras, dan sanksi.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-red-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
+          {/* Card 8: BKK & Alumni */}
+          <button
+            onClick={() => onNavigate('bkk')}
+            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Briefcase className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-base">BKK & Penyaluran Alumni</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Bursa Kerja Khusus berizin, info lowongan rekanan industri, magang PKL, dan tracer study.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+          </button>
+
         </div>
       </section>
 
-      {/* 7. PPDB CTA BANNER */}
+      {/* 8. PPDB BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl text-center md:text-left">
@@ -417,10 +511,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectMajor })
               Penerimaan Siswa Baru
             </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Siap Menjadi Ahli Vokasi Masa Depan?
+              Siap Bergabung dengan SMK Budi Murni 1?
             </h3>
             <p className="text-xs sm:text-sm text-blue-100">
-              Daftarkan diri Anda sekarang untuk TP 2026/2027. Kuota kelas terbatas untuk menjamin rasio praktik optimal di bengkel & lab.
+              Pendaftaran peserta didik baru TP 2026/2027 telah dibuka. Kuota kelas terbatas untuk menjamin rasio praktik optimal di bengkel & lab.
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">

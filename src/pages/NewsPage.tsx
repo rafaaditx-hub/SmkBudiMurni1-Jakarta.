@@ -7,7 +7,7 @@ export const NewsPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('ALL');
 
-  const categories = ['ALL', 'Pengumuman', 'Prestasi', 'Kegiatan', 'Industri', 'PPDB'];
+  const categories = ['ALL', 'Hari Nasional', 'Kependidikan', 'Hari Raya', 'Pengumuman', 'PPDB'];
 
   const filteredNews = NEWS_ARTICLES.filter((item) => {
     const matchCat = filterCategory === 'ALL' || item.category === filterCategory;

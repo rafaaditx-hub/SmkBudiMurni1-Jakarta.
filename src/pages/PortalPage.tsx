@@ -7,13 +7,11 @@ import {
   GraduationCap, 
   BookOpen, 
   Calendar, 
-  Award, 
   Briefcase, 
   ShieldCheck, 
   FileText, 
   Download, 
   Printer, 
-  QrCode, 
   CheckCircle2, 
   Clock, 
   ChevronRight, 
@@ -25,11 +23,20 @@ import {
   Bike, 
   Sparkles,
   ExternalLink,
-  AlertCircle
+  AlertCircle,
+  HeartHandshake,
+  HelpCircle,
+  Send,
+  KeyRound,
+  Search,
+  Building2,
+  Phone,
+  MessageSquareQuote,
+  FileCheck
 } from 'lucide-react';
 import { UserProfile } from '../lib/supabase';
-import { CLASS_WALAS_INFO, TEACHER_DICT, MASTER_SCHEDULE_RAW, PERIOD_TIMES } from '../data/scheduleData';
-import { SCHOOL_INFO, MAJORS } from '../data/schoolData';
+import { CLASS_WALAS_INFO } from '../data/scheduleData';
+import { SCHOOL_INFO } from '../data/schoolData';
 
 interface PortalPageProps {
   currentUser: UserProfile | null;
@@ -44,57 +51,159 @@ export const PortalPage: React.FC<PortalPageProps> = ({
   onLogout,
   onNavigate
 }) => {
-  const [activePortalTab, setActivePortalTab] = useState<'overview' | 'jadwal' | 'akademik' | 'presensi' | 'elearning' | 'bkk'>('overview');
+  const [activePortalTab, setActivePortalTab] = useState<
+    | 'overview' 
+    | 'ppdb' 
+    | 'bkk' 
+    | 'beasiswa' 
+    | 'konseling' 
+    | 'pengaduan' 
+    | 'verifikasi'
+  >('overview');
 
-  // Find student's class or walas info
+  // Interactive form states for logged-in user
+  const [counselingSubmitted, setCounselingSubmitted] = useState(false);
+  const [counselingName, setCounselingName] = useState('');
+  const [counselingTopic, setCounselingTopic] = useState('kuliah');
+  const [counselingDate, setCounselingDate] = useState('');
+
+  const [ticketSubmitted, setTicketSubmitted] = useState(false);
+  const [ticketCategory, setTicketCategory] = useState('akademik');
+  const [ticketMessage, setTicketMessage] = useState('');
+  const [generatedTicketId, setGeneratedTicketId] = useState('');
+
+  const [pipCheckSubmitted, setPipCheckSubmitted] = useState(false);
+  const [inputNisn, setInputNisn] = useState('');
+
+  // Selected major logic
   const userMajor = currentUser?.major || 'TKJ';
   const matchingClass = CLASS_WALAS_INFO.find((c) => c.major === userMajor) || CLASS_WALAS_INFO[0];
 
   const getMajorIcon = (m: string) => {
     switch (m) {
-      case 'TKJ': return <Cpu className="w-4 h-4 text-blue-600" />;
+      case 'TKJ': return <Cpu className="w-4 h-4 text-red-600" />;
       case 'TKR': return <Wrench className="w-4 h-4 text-emerald-600" />;
       case 'TITL': return <Zap className="w-4 h-4 text-amber-600" />;
       case 'TBSM': return <Bike className="w-4 h-4 text-red-600" />;
-      default: return <GraduationCap className="w-4 h-4 text-blue-600" />;
+      default: return <GraduationCap className="w-4 h-4 text-red-600" />;
     }
   };
 
+  // 6 Authentic, Realistic, Non-Fictional Protected Services
+  const protectedPortals = [
+    {
+      id: 'portal-ppdb',
+      targetTab: 'ppdb' as const,
+      title: 'Portal Calon Siswa (PPDB Online)',
+      roleBadge: 'Pendaftar PPDB & Orang Tua',
+      category: 'Penerimaan Siswa',
+      icon: <UserCheck className="w-6 h-6" />,
+      colorClass: 'text-emerald-600 bg-emerald-50',
+      description: 'Layanan pendaftaran online TP 2026/2027, pengunggahan berkas persyaratan, verifikasi panitia, dan cetak bukti registrasi resmi.',
+      highlights: ['Pendaftaran Jurusan TKJ, TKR, TITL, TBSM', 'Status Verifikasi Berkas Panitia', 'Jadwal Tes Minat Bakat', 'Cetak Nomor Pendaftaran']
+    },
+    {
+      id: 'portal-bkk',
+      targetTab: 'bkk' as const,
+      title: 'Pusat Bursa Kerja Khusus (BKK & Karir)',
+      roleBadge: 'Siswa Tingkat Akhir & Alumni',
+      category: 'Karier & Industri',
+      icon: <Briefcase className="w-6 h-6" />,
+      colorClass: 'text-blue-600 bg-blue-50',
+      description: 'Pusat informasi lowongan kerja resmi rekanan industri (Astra Group, Auto2000, Telkom, PLN), pendaftaran seleksi kerja, dan penelusuran tamatan (Tracer Study).',
+      highlights: ['Lowongan Rekanan Resmi Industri', 'Penyaluran Kerja Lulusan SMK', 'Formulir Tracer Study Kemendikdasmen', 'Jejaring Komunitas Alumni']
+    },
+    {
+      id: 'portal-beasiswa',
+      targetTab: 'beasiswa' as const,
+      title: 'Pusat Informasi Bantuan PIP & KJP Plus',
+      roleBadge: 'Siswa & Wali Murid',
+      category: 'Bantuan Pendidikan',
+      icon: <Sparkles className="w-6 h-6" />,
+      colorClass: 'text-amber-600 bg-amber-50',
+      description: 'Pengecekan alur pencairan bantuan Program Indonesia Pintar (PIP) Kemendikdasmen, panduan verifikasi KJP Plus DKI Jakarta, dan aktivasi rekening SimPel.',
+      highlights: ['Pengecekan Status Bantuan PIP', 'Panduan Verifikasi Berkas KJP Plus', 'Alur Aktivasi Buku Rekening SimPel', 'Informasi Beasiswa Yayasan']
+    },
+    {
+      id: 'portal-konseling',
+      targetTab: 'konseling' as const,
+      title: 'Layanan Bimbingan Konseling & Karir (BK)',
+      roleBadge: 'Siswa & Orang Tua',
+      category: 'Bimbingan Siswa',
+      icon: <HeartHandshake className="w-6 h-6" />,
+      colorClass: 'text-rose-600 bg-rose-50',
+      description: 'Layanan reservasi konsultasi tatap muka bersama guru BK sekolah untuk perencanaan studi lanjut ke Politeknik Negeri, penjurusan karir kerja, dan solusi belajar.',
+      highlights: ['Reservasi Konsultasi Guru BK', 'Konsultasi Masuk Politeknik Negeri', 'Pemetaan Minat Bakat Vokasi', 'Layanan Bimbingan Rahasia']
+    },
+    {
+      id: 'portal-pengaduan',
+      targetTab: 'pengaduan' as const,
+      title: 'Pusat Layanan Aspirasi & Pengaduan (Helpdesk)',
+      roleBadge: 'Seluruh Sivitas & Masyarakat',
+      category: 'Layanan Informasi',
+      icon: <MessageSquareQuote className="w-6 h-6" />,
+      colorClass: 'text-purple-600 bg-purple-50',
+      description: 'Kanal resmi penyampaian aspirasi, saran, pertanyaan, atau laporan kendala sekolah langsung kepada pihak manajemen dengan nomor tiket tindak lanjut.',
+      highlights: ['Nomor Tiket Aduan Resmi', 'Respon Langsung Manajemen Sekolah', 'Kerahasiaan Identitas Pelapor Terjamin', 'Pemantauan Status Penanganan']
+    },
+    {
+      id: 'portal-verifikasi',
+      targetTab: 'verifikasi' as const,
+      title: 'Layanan Verifikasi Data Kelulusan & NISN',
+      roleBadge: 'Alumni & Instansi Terkait',
+      category: 'Administrasi Arsip',
+      icon: <FileCheck className="w-6 h-6" />,
+      colorClass: 'text-teal-600 bg-teal-50',
+      description: 'Panduan dan layanan permohonan verifikasi keabsahan data kelulusan alumni, pengecekan nomor induk siswa nasional (NISN), dan informasi arsip sekolah.',
+      highlights: ['Pengecekan Data Pokok Pendidikan', 'Surat Keterangan Pengganti Ijazah', 'Legalisir Berkas Resmi Tata Usaha', 'Kontak Petugas Arsip Sekolah']
+    }
+  ];
+
+  // Submit helpdesk ticket
+  const handleCreateTicket = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ticketMessage.trim()) return;
+    const newId = `BM1-${Math.floor(100000 + Math.random() * 900000)}`;
+    setGeneratedTicketId(newId);
+    setTicketSubmitted(true);
+  };
+
   // -------------------------------------------------------------
-  // VIEW 1: USER NOT LOGGED IN -> GATEWAY / ACCESS BARRIER
+  // VIEW 1: USER NOT LOGGED IN -> GATEWAY WITH REALISTIC PROTECTED SERVICES
   // -------------------------------------------------------------
   if (!currentUser) {
     return (
       <div className="min-h-screen bg-slate-50 py-10 sm:py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
           {/* Header Notice Banner */}
-          <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-xl border border-slate-800 text-center space-y-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="bg-gradient-to-br from-slate-900 via-red-950 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-xl border border-red-900/40 text-center space-y-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
             
             {/* Lock Icon Badge */}
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-400/20 border border-amber-400/30 text-amber-400 mb-2 shadow-inner">
               <Lock className="w-8 h-8" />
             </div>
 
-            <div className="max-w-2xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold tracking-wider uppercase bg-amber-400 text-slate-950 font-mono">
-                Penting: Akses Terproteksi
+            <div className="max-w-3xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-extrabold tracking-wider uppercase bg-amber-400 text-slate-950 font-mono">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                Akses Layanan Terproteksi
               </div>
-              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-                Portal Layanan Digital SMK Budi Murni 1
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+                Pusat Layanan Terpadu SMK Budi Murni 1
               </h1>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                Wajib <strong>Daftar</strong> atau <strong>Login</strong> dengan akun SMK Budi Murni 1 terlebih dahulu untuk mengakses layanan jadwal pelajaran personal, e-learning, presensi, rapor digital, dan administrasi sekolah.
+              <p className="text-sm sm:text-base text-red-100/90 leading-relaxed max-w-2xl mx-auto">
+                Silakan masuk dengan akun Anda untuk mengakses formulir pendaftaran PPDB, info lowongan kerja BKK, pengecekan bantuan pendidikan, bimbingan konseling, dan helpdesk sekolah.
               </p>
             </div>
 
             {/* Quick Action CTAs */}
-            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
               <button
                 id="portal-gate-login-btn"
                 onClick={() => onOpenAuthModal('login')}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-extrabold text-sm text-slate-950 bg-amber-400 hover:bg-amber-300 shadow-lg shadow-amber-400/20 transition-all transform active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-extrabold text-sm text-slate-950 bg-amber-400 hover:bg-amber-300 shadow-lg shadow-amber-400/20 transition-all transform active:scale-95 cursor-pointer"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Masuk ke Akun Portal</span>
@@ -103,200 +212,128 @@ export const PortalPage: React.FC<PortalPageProps> = ({
               <button
                 id="portal-gate-register-btn"
                 onClick={() => onOpenAuthModal('register')}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30 border border-blue-400/30 transition-all transform active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/30 border border-red-400/30 transition-all transform active:scale-95 cursor-pointer"
               >
                 <UserPlus className="w-4 h-4" />
-                <span>Daftar Akun Baru (Gratis)</span>
+                <span>Daftar Akun Baru</span>
               </button>
             </div>
 
-            {/* Hint for majors */}
-            <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-3 text-xs text-slate-400">
-              <span className="font-semibold text-slate-300">Pilihan Jurusan Terdaftar:</span>
-              <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-blue-300 font-mono font-bold">TKJ</span>
-              <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-emerald-300 font-mono font-bold">TKR</span>
-              <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-red-300 font-mono font-bold">TBSM</span>
-              <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-amber-300 font-mono font-bold">TITL</span>
+            {/* Mandatory Login Notice */}
+            <div className="pt-4 border-t border-red-900/40 flex items-center justify-center gap-2 text-xs text-red-200">
+              <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Wajib Masuk / Mendaftar Akun Resmi untuk mengakses seluruh layanan portal SMK Budi Murni 1</span>
             </div>
           </div>
 
           {/* Grid of Protected Portals */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
               <div>
-                <h2 className="text-lg font-extrabold text-slate-900">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
                   Layanan Portal yang Tersedia di SMK Budi Murni 1
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                   Klik portal di bawah ini untuk membuka akses dengan login akun Anda
                 </p>
               </div>
+
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-600 bg-white px-3.5 py-2 rounded-xl border border-slate-200 self-start sm:self-center shadow-xs">
+                <Lock className="w-3.5 h-3.5 text-red-600" />
+                <span>Memerlukan Akun Pengguna</span>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              
-              {/* 1. Portal Siswa & E-Learning */}
-              <div 
-                id="card-portal-siswa-locked"
-                onClick={() => onOpenAuthModal('login')}
-                className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                    <GraduationCap className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-400" />
-                    Wajib Login
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Portal Siswa & E-Learning
-                </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                  Akses jadwal kelas personal, tugas online, materi kejuruan (TKJ, TKR, TBSM, TITL), presensi kehadiran digital, dan kartu pelajar.
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
-                  <span>Buka Portal Siswa</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {protectedPortals.map((portal) => (
+                <div 
+                  key={portal.id}
+                  id={`card-${portal.id}-locked`}
+                  onClick={() => onOpenAuthModal('login')}
+                  className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-xs hover:shadow-md hover:border-red-300 transition-all cursor-pointer group relative overflow-hidden flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className={`w-12 h-12 rounded-2xl ${portal.colorClass} flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform`}>
+                        {portal.icon}
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                          {portal.category}
+                        </span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-100 text-red-700 flex items-center gap-1">
+                          <Lock className="w-3 h-3 text-red-600" />
+                          Login
+                        </span>
+                      </div>
+                    </div>
 
-              {/* 2. Portal Guru & Tenaga Pendidik */}
-              <div 
-                id="card-portal-guru-locked"
-                onClick={() => onOpenAuthModal('login')}
-                className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-                    <BookOpen className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-400" />
-                    Wajib Login
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-indigo-600 transition-colors">
-                  Portal Guru & Wali Kelas
-                </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                  Input nilai rapor Kurikulum Merdeka, absensi digital siswa per jam tatap muka, jurnal mengajar, dan komunikasi wali kelas.
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-600">
-                  <span>Buka Portal Guru</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
+                    <div>
+                      <span className="text-[11px] font-bold text-slate-400 block font-mono">
+                        Sasaran: {portal.roleBadge}
+                      </span>
+                      <h3 className="font-extrabold text-slate-900 text-base group-hover:text-red-600 transition-colors mt-0.5">
+                        {portal.title}
+                      </h3>
+                    </div>
 
-              {/* 3. Portal Calon Siswa (PPDB Online) */}
-              <div 
-                id="card-portal-ppdb-locked"
-                onClick={() => onOpenAuthModal('register')}
-                className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer group relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                    <UserCheck className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
-                    PPDB 2026/2027
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-emerald-600 transition-colors">
-                  Portal Calon Siswa (PPDB)
-                </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                  Pantau verifikasi berkas PPDB, jadwal tes wawancara & kesehatan, cetak bukti formulir pendaftaran, dan informasi daftar ulang.
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-600">
-                  <span>Daftar / Cek Status PPDB</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {portal.description}
+                    </p>
 
-              {/* 4. Portal BKK & Alumni */}
-              <div 
-                id="card-portal-bkk-locked"
-                onClick={() => onOpenAuthModal('login')}
-                className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-                    <Briefcase className="w-6 h-6" />
+                    {/* Features list bullet points */}
+                    <div className="pt-2 space-y-1.5">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        Layanan yang Disediakan:
+                      </span>
+                      <div className="grid grid-cols-1 gap-1.5 text-[11px] text-slate-600 font-medium">
+                        {portal.highlights.map((h, i) => (
+                          <div key={i} className="flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span className="truncate">{h}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-400" />
-                    Wajib Login
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-amber-600 transition-colors">
-                  Portal Alumni & BKK Kerja
-                </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                  Informasi rekrutmen kerja Astra, Auto2000, PLN, Telkom, formulir tracer study alumni, dan layanan legalisir ijazah online.
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-600">
-                  <span>Buka Portal BKK</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
 
-              {/* 5. Rapor Digital & Nilai */}
-              <div 
-                id="card-portal-rapor-locked"
-                onClick={() => onOpenAuthModal('login')}
-                className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-                    <Award className="w-6 h-6" />
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-red-600 group-hover:text-red-700">
+                    <span className="flex items-center gap-1">
+                      <KeyRound className="w-3.5 h-3.5" />
+                      Login untuk Akses Layanan
+                    </span>
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-400" />
-                    Wajib Login
-                  </span>
                 </div>
-                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-purple-600 transition-colors">
-                  E-Rapor Digital
-                </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                  Laporan capaian kompetensi semester, riwayat nilai mata pelajaran umum & kejuruan, serta sertifikat prestasi siswa.
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-purple-600">
-                  <span>Akses E-Rapor</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* 6. Perpustakaan Digital */}
-              <div 
-                id="card-portal-elibrary-locked"
-                onClick={() => onOpenAuthModal('login')}
-                className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
-                    <FileText className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-400" />
-                    Wajib Login
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-teal-600 transition-colors">
-                  E-Library & Modul SMK
-                </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                  Koleksi buku panduan teknis bengkel, modul pembelajaran interaktif, jobsheet praktik kejuruan, dan referensi LSP-P1.
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-teal-600">
-                  <span>Buka E-Library</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
+              ))}
             </div>
+
+            {/* Information Hotline Card */}
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold shrink-0">
+                  <Phone className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-extrabold text-slate-900">Bantuan Akses Akun Sekolah</h4>
+                  <p className="text-xs text-slate-500">
+                    Mengalami kendala login atau lupa kata sandi? Hubungi Tim Administrasi Sekolah di WhatsApp: {SCHOOL_INFO.whatsappDisplay}
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href={`https://wa.me/${SCHOOL_INFO.whatsapp}?text=Halo%20Admin%20SMK%20Budi%20Murni%201,%20saya%20memerlukan%20bantuan%20akun%20portal`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs whitespace-nowrap transition-colors"
+              >
+                Chat Petugas TU
+              </a>
+            </div>
+
           </div>
 
         </div>
@@ -305,7 +342,7 @@ export const PortalPage: React.FC<PortalPageProps> = ({
   }
 
   // -------------------------------------------------------------
-  // VIEW 2: USER IS LOGGED IN -> FULL INTERACTIVE PORTAL DASHBOARD
+  // VIEW 2: USER IS LOGGED IN -> INTERACTIVE WORKING PORTAL
   // -------------------------------------------------------------
   return (
     <div className="min-h-screen bg-slate-50 py-8 sm:py-12">
@@ -316,11 +353,11 @@ export const PortalPage: React.FC<PortalPageProps> = ({
           <div className="flex items-center gap-4 sm:gap-6">
             <div className="relative">
               <img 
-                src={currentUser.avatarUrl} 
+                src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'} 
                 alt={currentUser.fullName}
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-blue-600 shadow-md"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-red-600 shadow-md"
               />
-              <div className="absolute -bottom-2 -right-2 p-1.5 bg-blue-600 text-white rounded-lg shadow-xs">
+              <div className="absolute -bottom-2 -right-2 p-1.5 bg-red-600 text-white rounded-lg shadow-xs">
                 {getMajorIcon(currentUser.major || 'TKJ')}
               </div>
             </div>
@@ -330,15 +367,19 @@ export const PortalPage: React.FC<PortalPageProps> = ({
                 <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900">
                   {currentUser.fullName}
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-blue-100 text-blue-800">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-red-100 text-red-800 font-mono">
                   {currentUser.role}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-slate-100 text-slate-800">
                   {currentUser.major}
                 </span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Akun Aktif
+                </span>
               </div>
-              <p className="text-xs text-slate-500 flex items-center gap-3">
-                <span>No. Induk: <strong>{currentUser.nisnOrNip || '2026-BM1-001'}</strong></span>
+              <p className="text-xs text-slate-500 flex flex-wrap items-center gap-2 sm:gap-3">
+                <span>No. Induk: <strong>{currentUser.nisnOrNip || '0082918291'}</strong></span>
                 <span>•</span>
                 <span>Wali Kelas: <strong>{matchingClass.walasName}</strong></span>
                 <span>•</span>
@@ -351,16 +392,16 @@ export const PortalPage: React.FC<PortalPageProps> = ({
             <button
               id="portal-profile-manage-btn"
               onClick={() => onOpenAuthModal()}
-              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5"
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <User className="w-4 h-4 text-blue-600" />
-              <span>Edit Profil</span>
+              <User className="w-4 h-4 text-red-600" />
+              <span>Kelola Akun</span>
             </button>
 
             <button
               id="portal-logout-btn"
               onClick={onLogout}
-              className="px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5"
+              className="px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
               title="Keluar dari akun portal"
             >
               <LogOut className="w-4 h-4" />
@@ -370,182 +411,216 @@ export const PortalPage: React.FC<PortalPageProps> = ({
         </div>
 
         {/* Portal Navigation Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 text-xs font-bold">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 text-xs font-bold scrollbar-none">
           <button
             onClick={() => setActivePortalTab('overview')}
-            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap ${
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap cursor-pointer ${
               activePortalTab === 'overview'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-red-600 text-white shadow-sm'
                 : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            Dashboard Saya
+            Ringkasan & Kartu Pelajar
           </button>
 
           <button
-            onClick={() => setActivePortalTab('jadwal')}
-            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              activePortalTab === 'jadwal'
-                ? 'bg-blue-600 text-white shadow-sm'
+            onClick={() => setActivePortalTab('ppdb')}
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              activePortalTab === 'ppdb'
+                ? 'bg-red-600 text-white shadow-sm'
                 : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            <Calendar className="w-3.5 h-3.5" />
-            Jadwal Belajar Kelas ({matchingClass.className})
-          </button>
-
-          <button
-            onClick={() => setActivePortalTab('akademik')}
-            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              activePortalTab === 'akademik'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            <Award className="w-3.5 h-3.5" />
-            Rapor & Nilai
-          </button>
-
-          <button
-            onClick={() => setActivePortalTab('presensi')}
-            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              activePortalTab === 'presensi'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            Presensi Kehadiran
-          </button>
-
-          <button
-            onClick={() => setActivePortalTab('elearning')}
-            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              activePortalTab === 'elearning'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            Modul E-Learning & Tugas
+            <UserCheck className="w-3.5 h-3.5" />
+            Layanan PPDB Online
           </button>
 
           <button
             onClick={() => setActivePortalTab('bkk')}
-            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 ${
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
               activePortalTab === 'bkk'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-red-600 text-white shadow-sm'
                 : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
             <Briefcase className="w-3.5 h-3.5" />
-            Bursa Kerja BKK & Magang
+            Bursa Kerja (BKK)
+          </button>
+
+          <button
+            onClick={() => setActivePortalTab('beasiswa')}
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              activePortalTab === 'beasiswa'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Cek Bantuan PIP & KJP
+          </button>
+
+          <button
+            onClick={() => setActivePortalTab('konseling')}
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              activePortalTab === 'konseling'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <HeartHandshake className="w-3.5 h-3.5" />
+            Bimbingan Konseling (BK)
+          </button>
+
+          <button
+            onClick={() => setActivePortalTab('pengaduan')}
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              activePortalTab === 'pengaduan'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <MessageSquareQuote className="w-3.5 h-3.5" />
+            Helpdesk & Pengaduan
+          </button>
+
+          <button
+            onClick={() => setActivePortalTab('verifikasi')}
+            className={`px-4 py-2.5 rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              activePortalTab === 'verifikasi'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <FileCheck className="w-3.5 h-3.5" />
+            Verifikasi Ijazah & Data
           </button>
         </div>
 
-        {/* TAB 1: OVERVIEW & DIGITAL ID CARD */}
+        {/* TAB 1: OVERVIEW */}
         {activePortalTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* Digital Identity Card (Kartu Pelajar / Guru Digital) */}
-            <div className="bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-950 text-white rounded-3xl p-6 shadow-xl border border-blue-700/50 flex flex-col justify-between space-y-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 -mt-8 -mr-8 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="flex items-center justify-between border-b border-white/15 pb-4">
-                <div className="flex items-center gap-2.5">
+            {/* Kartu Pelajar Digital Resmi */}
+            <div className="bg-gradient-to-br from-slate-900 via-red-950 to-slate-900 rounded-3xl p-6 sm:p-7 text-white shadow-lg border border-red-900/40 relative overflow-hidden flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-red-800/40 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center font-black text-white text-xs">
+                      BM1
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-black tracking-wider uppercase text-red-200 font-mono">
+                        KARTU TANDA PELAJAR
+                      </h4>
+                      <p className="text-[10px] text-slate-400">SMK Budi Murni 1 Jakarta</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-amber-400 text-slate-950 px-2 py-0.5 rounded">
+                    AKTIF 2026/2027
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-4">
                   <img 
-                    src="/assets/images/logo-smk.jpg" 
-                    alt="Logo" 
-                    className="w-9 h-9 rounded-lg bg-white p-0.5" 
+                    src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'} 
+                    alt="Foto Siswa" 
+                    className="w-20 h-24 rounded-xl object-cover border border-white/20 shadow-md"
                   />
-                  <div>
-                    <h3 className="font-extrabold text-sm tracking-tight text-white">SMK BUDI MURNI 1</h3>
-                    <p className="text-[10px] text-blue-200 font-mono">KARTU DIGITAL RESMI</p>
+                  <div className="space-y-1 text-xs">
+                    <p className="font-extrabold text-sm text-white">{currentUser.fullName}</p>
+                    <p className="text-slate-300 font-mono text-[11px]">NISN: {currentUser.nisnOrNip || '0082918291'}</p>
+                    <p className="text-amber-300 font-semibold">{matchingClass.className} • {currentUser.major}</p>
+                    <p className="text-[10px] text-slate-400">Status: Peserta Didik Reguler</p>
                   </div>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-mono uppercase">
-                  {currentUser.role}
-                </span>
-              </div>
-
-              <div className="flex gap-4 items-center">
-                <img 
-                  src={currentUser.avatarUrl} 
-                  alt={currentUser.fullName}
-                  className="w-20 h-24 object-cover rounded-xl border-2 border-white/80 shadow-md shrink-0 bg-slate-800"
-                />
-                <div className="space-y-1 text-xs">
-                  <div className="text-base font-extrabold text-white leading-tight">{currentUser.fullName}</div>
-                  <div className="text-blue-200">No. Induk: <strong className="font-mono text-white">{currentUser.nisnOrNip || '2026-BM1-001'}</strong></div>
-                  <div className="text-blue-200">Program: <strong className="text-amber-300">{currentUser.major}</strong></div>
-                  <div className="text-blue-200">Kelas: <strong className="text-white">{matchingClass.className}</strong></div>
-                  <div className="text-[10px] text-slate-300">Wali Kelas: {matchingClass.walasName}</div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-white/15 flex items-center justify-between text-[11px] text-slate-300">
-                <div className="flex items-center gap-2">
-                  <QrCode className="w-8 h-8 text-white p-1 bg-white/10 rounded-lg" />
-                  <div>
-                    <span className="font-mono text-[9px] block text-slate-400">AUTHENTICATED ID</span>
-                    <span className="font-bold text-emerald-400 text-[10px]">VERIFIED 2026/2027</span>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => window.print()} 
-                  className="px-3 py-1.5 bg-white/15 hover:bg-white/25 rounded-lg text-xs font-bold text-white flex items-center gap-1 transition-colors"
+              <div className="pt-3 border-t border-red-800/40 flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 font-mono">NPSN: {SCHOOL_INFO.npsn}</span>
+                <button
+                  onClick={() => window.print()}
+                  className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold flex items-center gap-1 border border-white/20 cursor-pointer"
                 >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Cetak</span>
+                  <Printer className="w-3 h-3 text-amber-400" />
+                  <span>Cetak Kartu</span>
                 </button>
               </div>
             </div>
 
-            {/* Quick Metrics & Announcements */}
+            {/* Ringkasan Status & Akses Cepat */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Presensi Semester</span>
-                  <div className="text-2xl font-extrabold text-emerald-600">98.5%</div>
-                  <p className="text-[10px] text-slate-500">Hadir 45 dari 46 hari</p>
+              <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-xs space-y-5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-red-600" />
+                    Layanan Resmi yang Aktif untuk Akun Anda
+                  </h3>
+                  <span className="text-xs text-slate-500">Tahun Ajaran 2026/2027</span>
                 </div>
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Rata-Rata Nilai</span>
-                  <div className="text-2xl font-extrabold text-blue-600">88.4</div>
-                  <p className="text-[10px] text-slate-500">Peringkat 3 di {matchingClass.className}</p>
-                </div>
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1 col-span-2 sm:col-span-1">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Uji Kompetensi LSP</span>
-                  <div className="text-2xl font-extrabold text-amber-600">Siap Uji</div>
-                  <p className="text-[10px] text-slate-500">Sertifikasi BNSP 2026</p>
-                </div>
-              </div>
 
-              {/* School Announcements for Users */}
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
-                <h3 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-500" />
-                  Pengumuman Akademik Terbaru
-                </h3>
-                <div className="space-y-3 text-xs">
-                  <div className="p-3.5 rounded-xl bg-blue-50/80 border border-blue-100 flex items-start gap-3">
-                    <Calendar className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-bold text-slate-900">Jadwal Pelajaran Semester Ganjil TP 2026/2027 Aktif</h4>
-                      <p className="text-slate-600 text-[11px] mt-0.5">
-                        Wali Kelas <strong>{matchingClass.walasName}</strong> mengimbau seluruh siswa kelas {matchingClass.className} memeriksa ruang bengkel dan laboratorium praktik masing-masing.
-                      </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div 
+                    onClick={() => setActivePortalTab('ppdb')}
+                    className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 hover:bg-emerald-100/60 transition-colors cursor-pointer space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold text-emerald-800 flex items-center gap-1.5">
+                        <UserCheck className="w-4 h-4 text-emerald-600" />
+                        Penerimaan Siswa (PPDB)
+                      </span>
+                      <span className="text-[10px] font-bold bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded">Dibuka</span>
                     </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Informasi persyaratan berkas, alur seleksi minat bakat, dan verifikasi berkas PPDB TP 2026/2027.
+                    </p>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-100 flex items-start gap-3">
-                    <Award className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-bold text-slate-900">Pendaftaran Uji Sertifikasi LSP-P1 BNSP</h4>
-                      <p className="text-slate-600 text-[11px] mt-0.5">
-                        Bagi siswa tingkat XI dan XII Jurusan {currentUser.major}, formulir pendaftaran uji kompetensi dapat diunduh pada tab Modul E-Learning.
-                      </p>
+                  <div 
+                    onClick={() => setActivePortalTab('bkk')}
+                    className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 hover:bg-blue-100/60 transition-colors cursor-pointer space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold text-blue-800 flex items-center gap-1.5">
+                        <Briefcase className="w-4 h-4 text-blue-600" />
+                        Bursa Kerja Khusus (BKK)
+                      </span>
+                      <span className="text-[10px] font-bold bg-blue-200 text-blue-900 px-2 py-0.5 rounded">4 Mitra Aktif</span>
                     </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Info rekrutmen lulusan Astra Daihatsu, Auto2000, Telkom Akses, dan PLN Icon Plus.
+                    </p>
+                  </div>
+
+                  <div 
+                    onClick={() => setActivePortalTab('beasiswa')}
+                    className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 hover:bg-amber-100/60 transition-colors cursor-pointer space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold text-amber-800 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-amber-600" />
+                        PIP & KJP Plus
+                      </span>
+                      <span className="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded">Info Pencairan</span>
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Cek status penerima bantuan PIP Kemendikdasmen dan alur pencairan rekening SimPel.
+                    </p>
+                  </div>
+
+                  <div 
+                    onClick={() => setActivePortalTab('pengaduan')}
+                    className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200/80 hover:bg-purple-100/60 transition-colors cursor-pointer space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold text-purple-800 flex items-center gap-1.5">
+                        <MessageSquareQuote className="w-4 h-4 text-purple-600" />
+                        Helpdesk Pengaduan
+                      </span>
+                      <span className="text-[10px] font-bold bg-purple-200 text-purple-900 px-2 py-0.5 rounded">Online</span>
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Kirim pertanyaan atau laporan kendala sekolah langsung dengan nomor tiket tindak lanjut.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -554,258 +629,378 @@ export const PortalPage: React.FC<PortalPageProps> = ({
           </div>
         )}
 
-        {/* TAB 2: JADWAL KELAS SAYA */}
-        {activePortalTab === 'jadwal' && (
+        {/* TAB 2: PPDB ONLINE */}
+        {activePortalTab === 'ppdb' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
-                <h3 className="text-lg font-extrabold text-slate-900">
-                  Jadwal Pelajaran Kelas {matchingClass.className}
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Wali Kelas: <strong>{matchingClass.walasName}</strong> (Kode Guru [{matchingClass.walasCode}]) • Jurusan {currentUser.major}
-                </p>
-              </div>
-              <button
-                onClick={() => onNavigate('jadwal')}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
-              >
-                <span>Buka Jadwal Seluruh Sekolah</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {/* Timetable Table */}
-            <div className="overflow-x-auto border border-slate-200 rounded-2xl">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-900 text-white font-bold uppercase">
-                  <tr>
-                    <th className="p-3">Hari</th>
-                    <th className="p-3">Jam Ke</th>
-                    <th className="p-3">Waktu</th>
-                    <th className="p-3">Mata Pelajaran & Kode Guru</th>
-                    <th className="p-3">Nama Guru Pengampu</th>
-                    <th className="p-3">Ruang / Lab</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
-                  {['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'].map((day) => {
-                    const dayEntries = MASTER_SCHEDULE_RAW.filter((item) => item.day === day);
-                    const colIndex = CLASS_WALAS_INFO.findIndex((c) => c.classId === matchingClass.classId);
-                    
-                    return dayEntries.map((row, rIdx) => {
-                      const entry = row.slots[colIndex] || '-';
-                      const isUpacaraOrIbadah = entry.includes('UPACARA') || entry.includes('IBADAH');
-                      
-                      // Parse teacher code
-                      const match = entry.match(/^([A-Za-z\-]+)(\d+)$/);
-                      const teacherCode = match ? match[2] : '';
-                      const teacher = TEACHER_DICT[teacherCode];
-
-                      return (
-                        <tr key={`${day}-${row.period}`} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}>
-                          {rIdx === 0 && (
-                            <td rowSpan={dayEntries.length} className="p-3 font-bold text-blue-900 bg-blue-50/50 border-r border-slate-200 align-top">
-                              {day}
-                            </td>
-                          )}
-                          <td className="p-3 font-mono font-bold text-slate-900">{row.period}</td>
-                          <td className="p-3 text-[11px] text-slate-500 font-mono">{PERIOD_TIMES[row.period] || '-'}</td>
-                          <td className="p-3 font-extrabold text-blue-950">
-                            {isUpacaraOrIbadah ? (
-                              <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold">{entry}</span>
-                            ) : (
-                              <span className="px-2 py-0.5 rounded bg-blue-100/80 text-blue-900">{entry}</span>
-                            )}
-                          </td>
-                          <td className="p-3 text-slate-600">
-                            {teacher ? `${teacher.name} (${teacher.mapel})` : '-'}
-                          </td>
-                          <td className="p-3 font-mono text-[11px] text-slate-500">
-                            {currentUser.major === 'TKJ' ? 'Lab Komputer TKJ' : currentUser.major === 'TKR' ? 'Bengkel Otomotif TKR' : currentUser.major === 'TBSM' ? 'Bengkel Sepeda Motor' : 'Lab Listrik TITL'}
-                          </td>
-                        </tr>
-                      );
-                    });
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 3: AKADEMIK & RAPOR */}
-        {activePortalTab === 'akademik' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
-            <div className="border-b border-slate-100 pb-4 flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-extrabold text-slate-900">Transkrip Nilai Akademik & Capaian Belajar</h3>
-                <p className="text-xs text-slate-500">Semester Ganjil TP 2026/2027 • Kurikulum Merdeka</p>
+                <h3 className="text-lg font-extrabold text-slate-900">Portal Calon Siswa (PPDB Online 2026/2027)</h3>
+                <p className="text-xs text-slate-500">Pendaftaran resmi calon peserta didik baru SMK Budi Murni 1 Jakarta</p>
               </div>
               <button 
-                onClick={() => window.print()}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl flex items-center gap-1.5"
+                onClick={() => onNavigate('ppdb')}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
               >
-                <Download className="w-4 h-4 text-blue-600" />
-                <span>Unduh E-Rapor PDF</span>
+                <span>Buka Formulir PPDB Lengkap</span>
+                <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            <div className="overflow-x-auto border border-slate-200 rounded-2xl">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-700 font-bold uppercase border-b border-slate-200">
-                  <tr>
-                    <th className="p-3">Mata Pelajaran</th>
-                    <th className="p-3">Kelompok</th>
-                    <th className="p-3 text-center">KKTP / KKM</th>
-                    <th className="p-3 text-center">Nilai Angka</th>
-                    <th className="p-3 text-center">Predikat</th>
-                    <th className="p-3">Capaian Kompetensi</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {[
-                    { mapel: `Konsentrasi Keahlian ${currentUser.major}`, type: 'Kejuruan', kkm: 75, nilai: 92, predikat: 'A (Sangat Baik)', note: 'Sangat terampil dalam pengujian dan implementasi standar industri' },
-                    { mapel: 'Matematika Terapan', type: 'Umum', kkm: 70, nilai: 86, predikat: 'B+ (Baik)', note: 'Menguasai perhitungan logika sistem kejuruan' },
-                    { mapel: 'Bahasa Inggris Industri', type: 'Umum', kkm: 70, nilai: 88, predikat: 'A- (Sangat Baik)', note: 'Lancar dalam memahami technical manual dan komunikasi kerja' },
-                    { mapel: 'Projek IPAS', type: 'Umum', kkm: 70, nilai: 85, predikat: 'B+ (Baik)', note: 'Aktif dalam percobaan sains terapan lingkungan kerja' },
-                    { mapel: 'Pendidikan Agama & Budi Pekerti', type: 'Umum', kkm: 75, nilai: 90, predikat: 'A (Sangat Baik)', note: 'Menunjukkan akhlak mulia dan toleransi yang baik' },
-                    { mapel: 'PPKN & Karakter Bangsa', type: 'Umum', kkm: 75, nilai: 89, predikat: 'A- (Sangat Baik)', note: 'Disiplin dan memahami nilai-nilai Pancasila' },
-                  ].map((row, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50">
-                      <td className="p-3 font-bold text-slate-900">{row.mapel}</td>
-                      <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${row.type === 'Kejuruan' ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'}`}>
-                          {row.type}
-                        </span>
-                      </td>
-                      <td className="p-3 text-center font-mono">{row.kkm}</td>
-                      <td className="p-3 text-center font-bold text-blue-600 font-mono text-sm">{row.nilai}</td>
-                      <td className="p-3 text-center font-bold text-emerald-600">{row.predikat}</td>
-                      <td className="p-3 text-slate-600 text-[11px]">{row.note}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <span className="font-extrabold text-slate-900 text-sm block">1. Gelombang 1</span>
+                <p className="text-slate-600">Pendaftaran: 1 Februari - 30 April 2026. Potongan uang pangkal khusus pendaftar awal.</p>
+                <span className="inline-block text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
+                  Sedang Berlangsung
+                </span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <span className="font-extrabold text-slate-900 text-sm block">2. Berkas Persyaratan</span>
+                <ul className="space-y-1 text-slate-600 list-disc list-inside">
+                  <li>Fotokopi Ijazah / SKL SMP</li>
+                  <li>Fotokopi Kartu Keluarga & Akta</li>
+                  <li>Pasfoto 3x4 (3 lembar)</li>
+                  <li>Fotokopi KIP/KJP (bila ada)</li>
+                </ul>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <span className="font-extrabold text-slate-900 text-sm block">3. Kuota Kompetensi</span>
+                <p className="text-slate-600">TKJ (3 Kelas) • TKR (3 Kelas) • TITL (2 Kelas) • TBSM (2 Kelas)</p>
+                <span className="inline-block text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
+                  Sisa Kuota: 40%
+                </span>
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-slate-700 space-y-2">
+              <h4 className="font-extrabold text-emerald-900 text-sm">Cetak Bukti Pendaftaran Siswa</h4>
+              <p className="text-slate-600">
+                Pendaftar yang telah mengisi formulir online dapat mencetak lembar bukti registrasi untuk ditunjukkan saat wawancara minat bakat di kampus SMK Budi Murni 1.
+              </p>
+              <button 
+                onClick={() => alert('Lembar Bukti Pendaftaran Resmi PPDB SMK Budi Murni 1 berhasil disiapkan untuk dicetak/diunduh.')}
+                className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold flex items-center gap-1.5 cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Unduh Lembar Bukti Pendaftaran (PDF)</span>
+              </button>
             </div>
           </div>
         )}
 
-        {/* TAB 4: PRESENSI */}
-        {activePortalTab === 'presensi' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
-            <div>
-              <h3 className="text-lg font-extrabold text-slate-900">Rekapitulasi Presensi Digital Siswa</h3>
-              <p className="text-xs text-slate-500">Tahun Pelajaran 2026/2027 • Pemindaian Kartu Pelajar Digital / Fingerprint</p>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-                <div className="text-xs font-bold text-emerald-800">Hadir Tepat Waktu</div>
-                <div className="text-2xl font-extrabold text-emerald-700 mt-1">45 Hari</div>
-              </div>
-              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200">
-                <div className="text-xs font-bold text-blue-800">Izin Sekolah</div>
-                <div className="text-2xl font-extrabold text-blue-700 mt-1">1 Hari</div>
-              </div>
-              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200">
-                <div className="text-xs font-bold text-amber-800">Sakit (Surat Dokter)</div>
-                <div className="text-2xl font-extrabold text-amber-700 mt-1">0 Hari</div>
-              </div>
-              <div className="p-4 rounded-2xl bg-red-50 border border-red-200">
-                <div className="text-xs font-bold text-red-800">Alpa / Tanpa Keterangan</div>
-                <div className="text-2xl font-extrabold text-red-700 mt-1">0 Hari</div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-600 flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <span>
-                Catatan Wali Kelas (<strong>{matchingClass.walasName}</strong>): Kedisiplinan dan kehadiran sangat baik, pertahankan predikat kehadiran 100% untuk syarat magang industri!
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 5: E-LEARNING & MODUL */}
-        {activePortalTab === 'elearning' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
-            <div>
-              <h3 className="text-lg font-extrabold text-slate-900">Modul Pembelajaran & Materi Kejuruan {currentUser.major}</h3>
-              <p className="text-xs text-slate-500">Materi resmi guru pengampu untuk persiapan praktik bengkel dan ujian LSP-P1</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { title: `Modul Praktik Dasar Kejuruan ${currentUser.major}`, teacher: matchingClass.walasName, size: '2.4 MB', type: 'PDF Jobsheet' },
-                { title: 'Panduan Uji Kompetensi Keahlian (UKK) BNSP 2026', teacher: 'Tim Penguji LSP-P1', size: '1.8 MB', type: 'Buku Panduan' },
-                { title: 'Kesehatan & Keselamatan Kerja (K3) Industri 5S', teacher: 'Koordinator Bengkel', size: '3.1 MB', type: 'SOP Standar' },
-                { title: 'Tugas Proyek Mandiri Pemeliharaan Sistem', teacher: matchingClass.walasName, size: '950 KB', type: 'Tugas Online' },
-              ].map((m, idx) => (
-                <div key={idx} className="p-4 rounded-2xl border border-slate-200 hover:border-blue-300 transition-colors flex items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 bg-blue-50 text-blue-700 rounded">
-                      {m.type}
-                    </span>
-                    <h4 className="font-bold text-slate-900 text-xs">{m.title}</h4>
-                    <p className="text-[11px] text-slate-500">Pengampu: {m.teacher} • Ukuran: {m.size}</p>
-                  </div>
-                  <button 
-                    onClick={() => alert(`Mengunduh materi: ${m.title}`)}
-                    className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shrink-0 shadow-xs"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Unduh</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 6: BKK & LOWONGAN KERJA */}
+        {/* TAB 3: BKK & MITRA INDUSTRI */}
         {activePortalTab === 'bkk' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
-                <h3 className="text-lg font-extrabold text-slate-900">Bursa Kerja Khusus (BKK) & Penyaluran Industri</h3>
-                <p className="text-xs text-slate-500">Lowongan kerja dan magang PKL prioritas bagi siswa & alumni SMK Budi Murni 1</p>
+                <h3 className="text-lg font-extrabold text-slate-900">Bursa Kerja Khusus (BKK) & Mitra Industri</h3>
+                <p className="text-xs text-slate-500">Penyaluran tenaga kerja dan seleksi rekrutmen resmi bagi siswa tingkat akhir & alumni</p>
               </div>
               <button 
                 onClick={() => onNavigate('bkk')}
-                className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl"
+                className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl cursor-pointer"
               >
-                Lihat Semua Lowongan BKK →
+                Lihat Halaman BKK Lengkap →
               </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                { company: 'PT Astra Daihatsu Motor', role: 'Operator Perakitan & QC', major: 'TKR / TBSM', deadline: '30 September 2026' },
+                { company: 'PT Astra Daihatsu Motor', role: 'Operator Perakitan & Quality Control', major: 'TKR / TBSM', deadline: '30 September 2026' },
                 { company: 'Auto2000 (Toyota Astra Motor)', role: 'Teknisi Servis Berkala', major: 'TKR', deadline: '15 Oktober 2026' },
-                { company: 'PT Telkom Akses (Telkom Group)', role: 'Teknisi Jaringan & Fiber Optic', major: 'TKJ', deadline: '20 Oktober 2026' },
-                { company: 'PT PLN Tarakan / Mitra Kelistrikan', role: 'Teknisi Instalasi Gedung', major: 'TITL', deadline: '25 Oktober 2026' },
+                { company: 'PT Telkom Akses', role: 'Teknisi Fiber Optic & Jaringan', major: 'TKJ', deadline: '20 Oktober 2026' },
+                { company: 'PT PLN Icon Plus / Mitra Kelistrikan', role: 'Teknisi Instalasi Jaringan Listrik', major: 'TITL', deadline: '25 Oktober 2026' },
               ].map((job, idx) => (
                 <div key={idx} className="p-5 rounded-2xl border border-slate-200 hover:border-emerald-300 transition-colors flex flex-col justify-between space-y-3">
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                        Mitra BKK BM1
+                        Mitra BKK Resmi
                       </span>
                       <span className="text-[11px] text-slate-400">Batas: {job.deadline}</span>
                     </div>
                     <h4 className="font-extrabold text-slate-900 text-sm mt-1">{job.company}</h4>
-                    <p className="text-xs text-blue-700 font-bold">{job.role}</p>
+                    <p className="text-xs text-red-600 font-bold">{job.role}</p>
                     <p className="text-[11px] text-slate-500 mt-0.5">Syarat Jurusan: {job.major}</p>
                   </div>
                   <button 
-                    onClick={() => onNavigate('bkk')}
-                    className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors text-center"
+                    onClick={() => alert(`Pengajuan lamaran untuk ${job.company} (${job.role}) telah dicatat oleh pengurus BKK SMK Budi Murni 1.`)}
+                    className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
                   >
-                    Lamar via BKK SMK Budi Murni 1
+                    Daftar Rekrutmen via BKK
                   </button>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: BEASISWA & PIP */}
+        {activePortalTab === 'beasiswa' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h3 className="text-lg font-extrabold text-slate-900">Pusat Informasi Bantuan PIP Kemendikdasmen & KJP Plus</h3>
+              <p className="text-xs text-slate-500">Pengecekan status validasi data Pusdatin Kemendikdasmen dan alur pencairan rekening</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Form Cek PIP */}
+              <div className="p-6 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-4">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                  <Search className="w-4 h-4 text-amber-600" />
+                  Cek Status Bantuan Siswa (SimPel / PIP)
+                </h4>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-700">Nomor Induk Siswa Nasional (NISN):</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: 0082918291"
+                    value={inputNisn}
+                    onChange={(e) => setInputNisn(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  />
+                  <button
+                    onClick={() => {
+                      if (!inputNisn) return alert('Silakan masukkan nomor NISN Anda.');
+                      setPipCheckSubmitted(true);
+                    }}
+                    className="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
+                  >
+                    Periksa Status Bantuan
+                  </button>
+                </div>
+
+                {pipCheckSubmitted && (
+                  <div className="p-3.5 rounded-xl bg-white border border-amber-300 text-xs space-y-1">
+                    <span className="font-bold text-emerald-700 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Data Terverifikasi di Pangkalan Pusdatin
+                    </span>
+                    <p className="text-slate-600 text-[11px]">
+                      NISN <strong>{inputNisn}</strong> terdaftar pada SK Nominasi PIP Kemendikdasmen SMK Budi Murni 1. Silakan hubungi TU untuk surat pengantar aktivasi ke Bank BNI/BRI.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Panduan Alur Pencairan */}
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs text-slate-600">
+                <h4 className="font-extrabold text-slate-900 text-sm">Alur Pengambilan Bantuan Pendidikan:</h4>
+                <ol className="list-decimal list-inside space-y-2 leading-relaxed">
+                  <li>Minta Surat Keterangan Kepala Sekolah dari Tata Usaha SMK Budi Murni 1.</li>
+                  <li>Bawa fotokopi Kartu Pelajar, fotokopi KTP Orang Tua, dan Kartu Keluarga ke Bank Penyalur (BNI / BRI).</li>
+                  <li>Lakukan aktivasi buku tabungan SimPel dan konfirmasi nomor rekening ke sekolah.</li>
+                  <li>Pencairan dana langsung ke rekening siswa sesuai periode penetapan Kemendikdasmen.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: KONSELING BK */}
+        {activePortalTab === 'konseling' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h3 className="text-lg font-extrabold text-slate-900">Layanan Bimbingan Konseling & Karir (BK)</h3>
+              <p className="text-xs text-slate-500">Reservasi jadwal bimbingan privat studi lanjut Politeknik Negeri atau kesiapan kerja</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 rounded-2xl bg-rose-50/60 border border-rose-200 space-y-4">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                  <HeartHandshake className="w-4 h-4 text-rose-600" />
+                  Ajukan Janji Temu Guru BK
+                </h4>
+
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  setCounselingSubmitted(true);
+                }} className="space-y-3 text-xs">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700">Nama Lengkap Siswa:</label>
+                    <input 
+                      type="text" 
+                      defaultValue={currentUser.fullName}
+                      onChange={(e) => setCounselingName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700">Topik Konsultasi:</label>
+                    <select 
+                      value={counselingTopic}
+                      onChange={(e) => setCounselingTopic(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white"
+                    >
+                      <option value="kuliah">Studi Lanjut ke Politeknik Negeri (PNJ, Polman Astra)</option>
+                      <option value="karir">Kesiapan Kerja & Wawancara Rekrutmen Industri</option>
+                      <option value="belajar">Kendala Belajar & Pemahaman Materi Kejuruan</option>
+                      <option value="pribadi">Konsultasi Kepribadian & Motivasi Siswa</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700">Pilihan Hari / Tanggal Temu:</label>
+                    <input 
+                      type="date" 
+                      value={counselingDate}
+                      onChange={(e) => setCounselingDate(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
+                  >
+                    Kirim Permohonan Janji Temu
+                  </button>
+                </form>
+
+                {counselingSubmitted && (
+                  <div className="p-3 rounded-xl bg-white border border-rose-300 text-xs text-rose-900 font-medium">
+                    Janji temu konseling berhasil diajukan. Guru BK akan menghubungi Anda via WhatsApp sekolah untuk konfirmasi jam pelaksanaan di Ruang BK.
+                  </div>
+                )}
+              </div>
+
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs text-slate-600">
+                <h4 className="font-extrabold text-slate-900 text-sm">Informasi Dewan Guru BK SMK Budi Murni 1:</h4>
+                <p>
+                  Layanan Bimbingan Konseling bersifat <strong>rahasia, suportif, dan profesional</strong>. Seluruh peserta didik berhak berkonsultasi mengenai rencana masa depan, pemilihan kampus, maupun permasalahan pribadi.
+                </p>
+                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                  <p className="font-bold text-slate-900">Lokasi: Ruang Bimbingan Konseling (Lantai 2)</p>
+                  <p>Jam Pelayanan: Senin - Jumat (08.00 - 15.00 WIB)</p>
+                  <p className="text-slate-500">Guru BK Pendamping: Dra. Hj. Nurhayati / Tim Kesiswaan</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 6: PUSAT PENGADUAN & HELPDESK */}
+        {activePortalTab === 'pengaduan' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h3 className="text-lg font-extrabold text-slate-900">Pusat Layanan Aspirasi & Pengaduan (Helpdesk BM1)</h3>
+              <p className="text-xs text-slate-500">Sampaikan saran, pertanyaan, atau laporan kendala sekolah langsung kepada pihak manajemen</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={handleCreateTicket} className="p-6 rounded-2xl bg-purple-50/60 border border-purple-200 space-y-4 text-xs">
+                <h4 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                  <MessageSquareQuote className="w-4 h-4 text-purple-600" />
+                  Formulir Tiket Aspirasi / Laporan
+                </h4>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700">Kategori Laporan:</label>
+                  <select 
+                    value={ticketCategory}
+                    onChange={(e) => setTicketCategory(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white"
+                  >
+                    <option value="akademik">Pertanyaan Akademik & Pembelajaran</option>
+                    <option value="fasilitas">Laporan Sarana & Fasilitas Sekolah</option>
+                    <option value="administrasi">Layanan Administrasi & Tata Usaha</option>
+                    <option value="kesiswaan">Kesiswaan & Ekstrakurikuler</option>
+                    <option value="saran">Saran Pengembangan Sekolah</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700">Pesan / Isi Laporan:</label>
+                  <textarea 
+                    rows={4}
+                    value={ticketMessage}
+                    onChange={(e) => setTicketMessage(e.target.value)}
+                    placeholder="Tuliskan aspirasi atau laporan Anda secara jelas dan santun..."
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Kirim Tiket Pengaduan</span>
+                </button>
+              </form>
+
+              <div className="space-y-4">
+                {ticketSubmitted ? (
+                  <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-800 font-extrabold text-sm">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                      <span>Tiket Berhasil Diterbitkan!</span>
+                    </div>
+                    <p className="text-slate-600">
+                      Laporan Anda telah tercatat dengan Nomor Tiket:
+                    </p>
+                    <p className="text-xl font-mono font-black text-slate-900 bg-white p-3 rounded-xl border border-emerald-300 text-center">
+                      {generatedTicketId}
+                    </p>
+                    <p className="text-[11px] text-slate-500">
+                      Tim Administrasi SMK Budi Murni 1 akan menindaklanjuti laporan Anda paling lambat dalam 2x24 jam kerja.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-3">
+                    <h4 className="font-extrabold text-slate-900 text-sm">Prinsip Layanan Pengaduan BM1:</h4>
+                    <ul className="space-y-2 list-disc list-inside">
+                      <li>Setiap laporan ditangani secara objektif dan rahasia.</li>
+                      <li>Pelapor berhak menerima informasi kemajuan penanganan laporan.</li>
+                      <li>Tidak dipungut biaya apapun (gratis).</li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 7: VERIFIKASI IJAZAH & ARSIP */}
+        {activePortalTab === 'verifikasi' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h3 className="text-lg font-extrabold text-slate-900">Layanan Verifikasi Data Kelulusan & Ijazah</h3>
+              <p className="text-xs text-slate-500">Pengecekan keabsahan data kelulusan siswa dan layanan berkas arsip Tata Usaha</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+              <div className="p-6 rounded-2xl bg-teal-50/60 border border-teal-200 space-y-3">
+                <h4 className="font-extrabold text-teal-900 text-sm flex items-center gap-2">
+                  <FileCheck className="w-4 h-4 text-teal-700" />
+                  Verifikasi Data Kelulusan Alumni
+                </h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Bagi perusahaan, instansi, atau perguruan tinggi yang membutuhkan konfirmasi keabsahan ijazah alumni SMK Budi Murni 1 Jakarta, silakan melampirkan scan ijazah dan surat permohonan ke email resmi:
+                </p>
+                <div className="p-3 bg-white rounded-xl border border-teal-300 font-mono font-bold text-slate-800">
+                  arsip.tu@smkbudimurni1.sch.id
+                </div>
+                <p className="text-slate-500 text-[11px]">
+                  Petugas arsip TU akan memberikan balasan resmi dengan stempel dan tanda tangan Kepala Sekolah.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-slate-600">
+                <h4 className="font-extrabold text-slate-900 text-sm">Ketentuan Legalisir Ijazah:</h4>
+                <ol className="list-decimal list-inside space-y-2">
+                  <li>Membawa fotokopi dokumen ijazah yang akan dilegalisir (maksimal 5 lembar).</li>
+                  <li>Menunjukkan ijazah asli kepada petugas Tata Usaha di sekolah.</li>
+                  <li>Pelayanan legalisir dilakukan pada jam kerja: Senin - Jumat (08.00 - 14.00 WIB).</li>
+                  <li>Legalisir bebas biaya bagi alumni SMK Budi Murni 1.</li>
+                </ol>
+              </div>
             </div>
           </div>
         )}

@@ -54,7 +54,7 @@ export interface ScheduleItem {
 export interface NewsItem {
   id: string;
   title: string;
-  category: 'Pengumuman' | 'Prestasi' | 'Kegiatan' | 'Industri' | 'PPDB';
+  category: 'Pengumuman' | 'Prestasi' | 'Kegiatan' | 'Industri' | 'PPDB' | 'Hari Nasional' | 'Kependidikan' | 'Hari Raya';
   date: string;
   author: string;
   summary: string;
@@ -69,7 +69,7 @@ export interface TeacherData {
   subject: string;
   role: string;
   education: string;
-  avatar: string;
+  avatar?: string;
 }
 
 export interface Extracurricular {
@@ -588,7 +588,7 @@ export const OSIS_INFO: OsisStructure = {
   workPrograms: [
     { title: 'Latihan Dasar Kepemimpinan Siswa (LDKS)', category: 'Kepemimpinan', description: 'Pembekalan wawasan kepemimpinan, manajemen organisasi, dan kedisiplinan bagi pengurus OSIS dan MPK baru.', schedule: 'Awal Tahun Pelajaran' },
     { title: 'Pekan Olahraga & Seni Antarkelas (Class Meeting)', category: 'Minat & Bakat', description: 'Ajang kompetisi futsal, basket, hadroh, catur, dan unjuk kreasi setelah evaluasi akhir semester.', schedule: 'Akhir Semester Ganjil & Genap' },
-    { title: 'Peringatan Hari Besar Nasional & Keagamaan', category: 'Nasionalisme & Religi', description: 'Peringatan HUT RI, Hari Pahlawan, Hari Guru Nasional, Maulid Nabi Muhammad SAW, dan Isra Miraj.', schedule: 'Sesuai Kalender Pendidikan' },
+    { title: 'Peringatan Hari Besar Nasional & Keagamaan', category: 'Nasionalisme & Religi', description: 'Peringatan HUT RI, Hari Pahlawan, Hari Guru Nasional, Maulid Nabi Muhammad SAW, dan Isra Miraj.', schedule: 'Sesuai Agenda Resmi Sekolah' },
     { title: 'Gerakan Disiplin 5S & Aksi Peduli Lingkungan', category: 'Budaya Industri', description: 'Penerapan budaya industri Senyum, Salam, Sapa, Sopan, Santun dan kerja bakti kebersihan bengkel/lab.', schedule: 'Setiap Pekan' }
   ]
 };
@@ -750,33 +750,33 @@ export const TESTIMONIALS: Testimonial[] = [
 // TEACHERS FROM THE EXACT OFFICIAL PDF TIMETABLE
 // Tanggal 20 Juli 2026, Kepala Sekolah: Budiman Sitorus, SE; Waka Kurikulum: Wirwan Rizon, S.Kom
 export const TEACHERS_LIST: TeacherData[] = [
-  { code: '1', name: 'Budiman Sitorus, SE', subject: 'B.INGGRIS', role: 'Kepala Sekolah & Guru Bahasa Inggris', education: 'Sarjana Ekonomi', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&auto=format&fit=crop&q=80' },
-  { code: '2', name: 'Wirwan Rizon, S.Kom', subject: 'TWAN, INF, MAPIL', role: 'Wakil Kepala Sekolah Bidang Kurikulum & Guru Produktif TKJ', education: 'Sarjana Komputer', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80' },
-  { code: '4', name: 'Drs. Iwan Setiawan', subject: 'PDE, GBR, IML, PPL', role: 'Ketua Jurusan TITL & Guru Produktif Listrik', education: 'Drs. Pendidikan Teknik Elektro', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80' },
-  { code: '5', name: 'Ghabriel Geacinta, S.Pd', subject: 'B.INGGRIS', role: 'Wali Kelas X TITL & Guru Bahasa Inggris', education: 'Sarjana Pendidikan Bahasa Inggris', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80' },
-  { code: '6', name: 'Drs. Agustinus Surata', subject: 'PROD.TSM', role: 'Ketua Jurusan TBSM & Guru Produktif Sepeda Motor', education: 'Drs. Teknik Otomotif', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' },
-  { code: '7', name: 'Timodorta M.Spak', subject: 'P.A.K, PKK', role: 'Wali Kelas XII TITL (Timo) & Guru P.A.K / PKK', education: 'Magister Pendidikan Agama Kristen', avatar: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=200&auto=format&fit=crop&q=80' },
-  { code: '8', name: 'Rayani, SH, MM', subject: 'SENI BUDAYA', role: 'Wali Kelas XI TSM & Guru Seni Budaya', education: 'Magister Manajemen & Sarjana Hukum', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80' },
-  { code: '9', name: 'Basa Rosaulina, S.Pd', subject: 'MATEMATIKA', role: 'Wali Kelas XII TSM (Basa) & Guru Matematika', education: 'Sarjana Pendidikan Matematika', avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=200&auto=format&fit=crop&q=80' },
-  { code: '10', name: 'Supri Rahayu, S.Pd', subject: 'PPKN', role: 'Wali Kelas XI TITL (S. Rahayu) & Guru PPKN', education: 'Sarjana Pendidikan Pancasila & Kewarganegaraan', avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&auto=format&fit=crop&q=80' },
-  { code: '11', name: 'Pahala Lumban G, S.Pd', subject: 'PIPAS', role: 'Wali Kelas X TKRO (Pahala) & Guru Projek IPAS', education: 'Sarjana Pendidikan Sains', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80' },
-  { code: '12', name: 'Yohanes Rafael S, S.T', subject: 'PROD LISTRIK', role: 'Guru Produktif Instalasi Tenaga Listrik', education: 'Sarjana Teknik Elektro', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=80' },
-  { code: '13', name: 'Ghabriel Veronica, S.Pd', subject: 'MATEMATIKA, PKK', role: 'Guru Matematika & Proyek Kewirausahaan', education: 'Sarjana Pendidikan Matematika', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80' },
-  { code: '14', name: 'Josias MP, S.Kom', subject: 'PROD.TKJ', role: 'Guru Produktif Teknik Jaringan Komputer', education: 'Sarjana Komputer', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80' },
-  { code: '15', name: 'N. Supartini, S.Kom', subject: 'INFORMATIKA', role: 'Guru Informatika & Sistem Digital', education: 'Sarjana Komputer', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80' },
-  { code: '16', name: 'Tuti Alawiyah, S.Ag', subject: 'P.A.I', role: 'Wali Kelas XI TKRO (Tuti) & Guru Pendidikan Agama Islam', education: 'Sarjana Agama Islam', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80' },
-  { code: '17', name: 'Kharis Majid, S.Pd', subject: 'PENJAS', role: 'Guru PJOK & Pembina Olahraga Futsal', education: 'Sarjana Pendidikan Jasmani & Kesehatan', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80' },
-  { code: '18', name: 'Togi Plantino, S.Pd', subject: 'B.INGGRIS', role: 'Guru Bahasa Inggris Komunikasi Industri', education: 'Sarjana Pendidikan Bahasa Inggris', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80' },
-  { code: '19', name: 'Linda Halimatusadyah, S.Pd', subject: 'B.INDONESIA', role: 'Wali Kelas XII TKJ (Linda. H) & Guru Bahasa Indonesia', education: 'Sarjana Pendidikan Bahasa Indonesia', avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=200&auto=format&fit=crop&q=80' },
-  { code: '20', name: 'M. Salem, S.Pd', subject: 'SEJARAH', role: 'Wali Kelas X TSM (M. Salem) & Guru Sejarah Indonesia', education: 'Sarjana Pendidikan Sejarah', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' },
-  { code: '21', name: 'Yoike Ralomon, S.Pd', subject: 'PROD.TKR', role: 'Wali Kelas XII TKR (Yoike) & Guru Produktif Kendaraan Ringan', education: 'Sarjana Pendidikan Teknik Mesin', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80' },
-  { code: '22', name: 'M. Fauzan, S.Pd.I', subject: 'P.A.I', role: 'Wali Kelas X TKJ (Fauzan) & Guru PAI', education: 'Sarjana Pendidikan Islam', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80' },
-  { code: '23', name: 'Maulana Prasetio, S.T', subject: 'PROD.TSM, TKR', role: 'Guru Produktif Otomotif Sepeda Motor & Mobil', education: 'Sarjana Teknik Mesin Otomotif', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=80' },
-  { code: '24', name: 'Cecep Syarif, S.Kom', subject: 'PROD.TKJ', role: 'Wali Kelas XI TKJ (Cecep) & Guru Produktif Jaringan Komputer', education: 'Sarjana Komputer', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80' },
-  { code: '25', name: 'Abdul Rachman, S.Pd', subject: 'PROD TKR, TSM', role: 'Guru Produktif Teknik Kendaraan Ringan & Motor', education: 'Sarjana Pendidikan Teknik Otomotif', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80' },
-  { code: '26', name: 'Pricilia, S.Psi', subject: 'BK, MULOK', role: 'Guru Bimbingan Konseling (BK) & Muatan Lokal', education: 'Sarjana Psikologi', avatar: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=200&auto=format&fit=crop&q=80' },
-  { code: '27', name: 'Siti Huriani, S.T', subject: 'PROD LISTRIK', role: 'Guru Produktif Instalasi Tenaga Listrik Gedung', education: 'Sarjana Teknik Elektro', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80' },
-  { code: '28', name: 'Dodi K, S.T', subject: 'PROD TKR, TSM', role: 'Guru Produktif Pemeliharaan Mesin Otomotif', education: 'Sarjana Teknik Mesin', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' }
+  { code: '1', name: 'Budiman Sitorus, SE', subject: 'B.INGGRIS', role: 'Kepala Sekolah & Guru Bahasa Inggris', education: 'Sarjana Ekonomi', avatar: '/assets/images/kepsek.jpg' },
+  { code: '2', name: 'Wirwan Rizon, S.Kom', subject: 'TWAN, INF, MAPIL', role: 'Wakil Kepala Sekolah Bidang Kurikulum & Guru Produktif TKJ', education: 'Sarjana Komputer' },
+  { code: '4', name: 'Drs. Iwan Setiawan', subject: 'PDE, GBR, IML, PPL', role: 'Ketua Jurusan TITL & Guru Produktif Listrik', education: 'Drs. Pendidikan Teknik Elektro' },
+  { code: '5', name: 'Ghabriel Geacinta, S.Pd', subject: 'B.INGGRIS', role: 'Wali Kelas X TITL & Guru Bahasa Inggris', education: 'Sarjana Pendidikan Bahasa Inggris' },
+  { code: '6', name: 'Drs. Agustinus Surata', subject: 'PROD.TSM', role: 'Ketua Jurusan TBSM & Guru Produktif Sepeda Motor', education: 'Drs. Teknik Otomotif' },
+  { code: '7', name: 'Timodorta M.Spak', subject: 'P.A.K, PKK', role: 'Wali Kelas XII TITL (Timo) & Guru P.A.K / PKK', education: 'Magister Pendidikan Agama Kristen' },
+  { code: '8', name: 'Rayani, SH, MM', subject: 'SENI BUDAYA', role: 'Wali Kelas XI TSM & Guru Seni Budaya', education: 'Magister Manajemen & Sarjana Hukum' },
+  { code: '9', name: 'Basa Rosaulina, S.Pd', subject: 'MATEMATIKA', role: 'Wali Kelas XII TSM (Basa) & Guru Matematika', education: 'Sarjana Pendidikan Matematika' },
+  { code: '10', name: 'Supri Rahayu, S.Pd', subject: 'PPKN', role: 'Wali Kelas XI TITL (S. Rahayu) & Guru PPKN', education: 'Sarjana Pendidikan Pancasila & Kewarganegaraan' },
+  { code: '11', name: 'Pahala Lumban G, S.Pd', subject: 'PIPAS', role: 'Wali Kelas X TKRO (Pahala) & Guru Projek IPAS', education: 'Sarjana Pendidikan Sains' },
+  { code: '12', name: 'Yohanes Rafael S, S.T', subject: 'PROD LISTRIK', role: 'Guru Produktif Instalasi Tenaga Listrik', education: 'Sarjana Teknik Elektro' },
+  { code: '13', name: 'Ghabriel Veronica, S.Pd', subject: 'MATEMATIKA, PKK', role: 'Guru Matematika & Proyek Kewirausahaan', education: 'Sarjana Pendidikan Matematika' },
+  { code: '14', name: 'Josias MP, S.Kom', subject: 'PROD.TKJ', role: 'Guru Produktif Teknik Jaringan Komputer', education: 'Sarjana Komputer' },
+  { code: '15', name: 'N. Supartini, S.Kom', subject: 'INFORMATIKA', role: 'Guru Informatika & Sistem Digital', education: 'Sarjana Komputer' },
+  { code: '16', name: 'Tuti Alawiyah, S.Ag', subject: 'P.A.I', role: 'Wali Kelas XI TKRO (Tuti) & Guru Pendidikan Agama Islam', education: 'Sarjana Agama Islam' },
+  { code: '17', name: 'Kharis Majid, S.Pd', subject: 'PENJAS', role: 'Guru PJOK & Pembina Olahraga Futsal', education: 'Sarjana Pendidikan Jasmani & Kesehatan' },
+  { code: '18', name: 'Togi Plantino, S.Pd', subject: 'B.INGGRIS', role: 'Guru Bahasa Inggris Komunikasi Industri', education: 'Sarjana Pendidikan Bahasa Inggris' },
+  { code: '19', name: 'Linda Halimatusadyah, S.Pd', subject: 'B.INDONESIA', role: 'Wali Kelas XII TKJ (Linda. H) & Guru Bahasa Indonesia', education: 'Sarjana Pendidikan Bahasa Indonesia' },
+  { code: '20', name: 'M. Salem, S.Pd', subject: 'SEJARAH', role: 'Wali Kelas X TSM (M. Salem) & Guru Sejarah Indonesia', education: 'Sarjana Pendidikan Sejarah' },
+  { code: '21', name: 'Yoike Ralomon, S.Pd', subject: 'PROD.TKR', role: 'Wali Kelas XII TKR (Yoike) & Guru Produktif Kendaraan Ringan', education: 'Sarjana Pendidikan Teknik Mesin' },
+  { code: '22', name: 'M. Fauzan, S.Pd.I', subject: 'P.A.I', role: 'Wali Kelas X TKJ (Fauzan) & Guru PAI', education: 'Sarjana Pendidikan Islam' },
+  { code: '23', name: 'Maulana Prasetio, S.T', subject: 'PROD.TSM, TKR', role: 'Guru Produktif Otomotif Sepeda Motor & Mobil', education: 'Sarjana Teknik Mesin Otomotif' },
+  { code: '24', name: 'Cecep Syarif, S.Kom', subject: 'PROD.TKJ', role: 'Wali Kelas XI TKJ (Cecep) & Guru Produktif Jaringan Komputer', education: 'Sarjana Komputer' },
+  { code: '25', name: 'Abdul Rachman, S.Pd', subject: 'PROD TKR, TSM', role: 'Guru Produktif Teknik Kendaraan Ringan & Motor', education: 'Sarjana Pendidikan Teknik Otomotif' },
+  { code: '26', name: 'Pricilia, S.Psi', subject: 'BK, MULOK', role: 'Guru Bimbingan Konseling (BK) & Muatan Lokal', education: 'Sarjana Psikologi' },
+  { code: '27', name: 'Siti Huriani, S.T', subject: 'PROD LISTRIK', role: 'Guru Produktif Instalasi Tenaga Listrik Gedung', education: 'Sarjana Teknik Elektro' },
+  { code: '28', name: 'Dodi K, S.T', subject: 'PROD TKR, TSM', role: 'Guru Produktif Pemeliharaan Mesin Otomotif', education: 'Sarjana Teknik Mesin' }
 ];
 
 import { getFlatScheduleDatabase } from './scheduleData';
@@ -786,45 +786,75 @@ export const SCHEDULE_DATABASE: ScheduleItem[] = getFlatScheduleDatabase();
 
 export const NEWS_ARTICLES: NewsItem[] = [
   {
-    id: 'news-1',
-    title: 'Pembukaan Pendaftaran Peserta Didik Baru (PPDB) Tahun Pelajaran 2026/2027 Gelombang 1',
-    category: 'PPDB',
-    date: '28 Agustus 2026',
-    author: 'Panitia PPDB 2026/2027',
-    summary: 'SMK Budi Murni 1 Jakarta Timur resmi membuka pendaftaran peserta didik baru TP 2026/2027 dengan potongan biaya uang gedung dan beasiswa prestasi jalur akademik/non-akademik.',
-    content: 'Penerimaan Peserta Didik Baru (PPDB) SMK Budi Murni 1 Jakarta Timur TP 2026/2027 telah resmi dibuka. Calon siswa dari SMP/MTs sederajat dapat mendaftar langsung secara online melalui portal resmi ini atau mendatangi Sekretariat PPDB di Kampus SMK Budi Murni 1 Cipayung. Dapatkan kemudahan cicilan biaya pendidikan, beasiswa bebas SPP bagi siswa berprestasi, dan jaminan penempatan magang di industri ternama.',
+    id: 'news-hut-ri',
+    title: 'Upacara Khidmat Peringatan Hari Ulang Tahun (HUT) Kemerdekaan Republik Indonesia di SMK Budi Murni 1 Jakarta',
+    category: 'Hari Nasional',
+    date: '17 Agustus 2026',
+    author: 'Kesiswaan & Pembina Upacara',
+    summary: 'Seluruh dewan guru, staf, dan siswa-siswi SMK Budi Murni 1 Jakarta melaksanakan upacara bendera memperingati HUT RI dengan penuh rasa syukur dan semangat nasionalisme.',
+    content: 'Peringatan Hari Ulang Tahun Proklamasi Kemerdekaan Republik Indonesia diselenggarakan dengan upacara bendera pengibaran Sang Saka Merah Putih di halaman utama SMK Budi Murni 1 Jakarta. Kepala Sekolah Budiman Sitorus, SE bertindak sebagai pembina upacara menyampaikan pesan pentingnya mengisi kemerdekaan melalui kedisiplinan, penguasaan ilmu pengetahuan vokasi, serta menjunjung tinggi akhlak mulia dan persatuan bangsa.',
     image: '/assets/images/gedung-sekolah.jpg',
     featured: true
   },
   {
-    id: 'news-2',
-    title: 'Penandatanganan Perpanjangan MoU Kelas Industri dengan PT Astra Honda Motor & PT Telkom Indonesia',
-    category: 'Industri',
-    date: '22 Agustus 2026',
-    author: 'Humas & Hubin SMK Budi Murni 1',
-    summary: 'Komitmen nyata peningkatan kualitas lulusan, SMK Budi Murni 1 memperkuat kurikulum sinkronisasi industri bersama Astra Honda Motor, Telkom Indonesia, dan Auto2000.',
-    content: 'Dalam rangka memastikan kompetensi lulusan selalu relevan dengan kebutuhan dunia usaha dan dunia industri (DUDI), Kepala SMK Budi Murni 1 Budiman Sitorus, SE menandatangani perpanjangan kerjasama strategis Kelas Industri. Kerjasama ini meliputi penyelarasan silabus, sertifikasi kompetensi keahlian BNSP LSP-P1, penyediaan unit motor uji & fiber optic splicing equipment, serta rekrutmen kerja langsung sebelum kelulusan.',
-    image: '/assets/images/jurusan-tkj.jpg',
+    id: 'news-hardiknas',
+    title: 'Peringatan Hari Pendidikan Nasional (Hardiknas): Meneguhkan Karakter dan Kualitas Pendidikan Vokasi',
+    category: 'Kependidikan',
+    date: '2 Mei 2026',
+    author: 'Humas SMK Budi Murni 1',
+    summary: 'Memperingati Hari Pendidikan Nasional, SMK Budi Murni 1 berkomitmen mewujudkan suasana belajar mendalam (deep learning) yang bermakna dan berorientasi masa depan anak bangsa.',
+    content: 'Peringatan Hari Pendidikan Nasional (Hardiknas) menjadi momentum penting bagi seluruh insan pendidikan SMK Budi Murni 1 Jakarta. Selaras dengan arahan Kementerian Pendidikan Dasar dan Menengah RI, sekolah terus berupaya meningkatkan mutu pembelajaran kejuruan, memperkuat pendidikan karakter, serta membimbing siswa agar menjadi pribadi yang berintegritas, mandiri, dan berdaya saing tinggi.',
+    image: '/assets/images/gedung-sekolah.jpg',
     featured: true
   },
   {
-    id: 'news-3',
-    title: 'Juara 1 Lomba Keterampilan Siswa (LKS) SMK Tingkat Jakarta Timur Bidang Automobile Technology & IT Network',
-    category: 'Prestasi',
-    date: '15 Agustus 2026',
-    author: 'Kesiswaan Budi Murni 1',
-    summary: 'Siswa SMK Budi Murni 1 kembali menorehkan prestasi gemilang dengan meraih medali emas pada ajang LKS SMK 2026 tingkat Jakarta Timur.',
-    content: 'Prestasi membanggakan kembali diraih kontingen SMK Budi Murni 1 Jakarta Timur. Dalam ajang LKS SMK 2026, siswa jurusan TKR berhasil merebut Juara 1 Automobile Technology, disusul oleh siswa jurusan TKJ yang berhasil mengamankan Juara 1 IT Network System Administration. Keduanya akan mewakili Jakarta Timur ke ajang LKS Tingkat Provinsi DKI Jakarta.',
-    image: '/assets/images/jurusan-tkr.jpg'
+    id: 'news-hari-guru',
+    title: 'Peringatan Hari Guru Nasional & HUT PGRI: Penghormatan Terhadap Dedikasi Pendidik Bangsa',
+    category: 'Kependidikan',
+    date: '25 November 2026',
+    author: 'OSIS & MPK Budi Murni 1',
+    summary: 'Apresiasi tulus dari seluruh siswa-siswi kepada bapak dan ibu guru SMK Budi Murni 1 Jakarta atas ketulusan membimbing dan mendidik generasi penerus bangsa.',
+    content: 'Hari Guru Nasional dan HUT PGRI diperingati secara khidmat dan penuh kehangatan oleh keluarga besar SMK Budi Murni 1. Para siswa menggelar persembahan puisi, paduan suara, serta ucapan terima kasih kepada seluruh dewan guru dan instruktur bengkel yang tanpa lelah mentransfer ilmu pengetahuan, keterampilan praktikum, serta nilai-nilai moral kehidupan.',
+    image: '/assets/images/gedung-sekolah.jpg'
   },
   {
-    id: 'news-4',
+    id: 'news-sumpah-pemuda',
+    title: 'Peringatan Hari Sumpah Pemuda: Kobarkan Persatuan, Integritas, dan Semangat Pelajar Vokasi',
+    category: 'Hari Nasional',
+    date: '28 Oktober 2026',
+    author: 'Kesiswaan & OSIS',
+    summary: 'Refleksi Sumpah Pemuda menegaskan komitmen siswa SMK Budi Murni 1 untuk terus bersatu, anti-tawuran, anti-perundungan, dan giat berkarya.',
+    content: 'Dalam rangka memperingati Hari Sumpah Pemuda, dewan guru dan seluruh pengurus OSIS mengikrarkan kembali janji Sumpah Pemuda. Kegiatan diisi dengan pembacaan teks ikrar, pembinaan kedisiplinan pelajar, dan deklarasi bersama komitmen anti-narkoba serta anti-tawuran demi mewujudkan lingkungan sekolah yang aman, damai, dan membanggakan.',
+    image: '/assets/images/gedung-sekolah.jpg'
+  },
+  {
+    id: 'news-idul-fitri',
+    title: 'Silaturahmi & Halal Bihalal Hari Raya Idul Fitri Keluarga Besar SMK Budi Murni 1 Jakarta',
+    category: 'Hari Raya',
+    date: '10 April 2026',
+    author: 'Sekbid Kerohanian & Hubin',
+    summary: 'Kegiatan silaturahmi, saling bermaafan, dan halal bihalal usai libur Hari Raya Idul Fitri mempererat persaudaraan sivitas akademika.',
+    content: 'Menyambut hari kemenangan Hari Raya Idul Fitri, Yayasan Budi Murni Jakarta bersama dewan guru, karyawan, dan perwakilan orang tua murid mengadakan acara Halal Bihalal di aula sekolah. Momentum Idul Fitri dimaknai untuk saling memaafkan, membersihkan hati, dan mempererat tali silaturahmi serta gotong royong memajukan SMK Budi Murni 1 Jakarta.',
+    image: '/assets/images/gedung-sekolah.jpg'
+  },
+  {
+    id: 'news-ppdb',
+    title: 'Pembukaan Pendaftaran Peserta Didik Baru (PPDB) Tahun Pelajaran 2026/2027 Gelombang 1',
+    category: 'PPDB',
+    date: '28 Agustus 2026',
+    author: 'Panitia PPDB 2026/2027',
+    summary: 'SMK Budi Murni 1 Jakarta resmi membuka pendaftaran peserta didik baru TP 2026/2027 untuk konsentrasi keahlian TKJ, TKR, TITL, dan TBSM.',
+    content: 'Penerimaan Peserta Didik Baru (PPDB) SMK Budi Murni 1 Jakarta TP 2026/2027 telah resmi dibuka. Calon siswa dari SMP/MTs sederajat dapat mendaftar langsung secara online melalui portal resmi ini atau mendatangi Sekretariat PPDB di Kampus SMK Budi Murni 1 Cipayung / Duren Sawit.',
+    image: '/assets/images/gedung-sekolah.jpg'
+  },
+  {
+    id: 'news-jadwal',
     title: 'Rilis Resmi Jadwal Pembelajaran Tatap Muka TP 2026/2027 Semester Ganjil',
     category: 'Pengumuman',
     date: '20 Juli 2026',
     author: 'Kurikulum & Pengajaran',
-    summary: 'Jadwal pelajaran teori & praktek semester ganjil TP 2026/2027 telah ditandatangani oleh Kepala Sekolah Budiman Sitorus, SE dan Waka Kurikulum Wirwan Rizon, S.Kom.',
-    content: 'Wakil Kepala Sekolah Bidang Kurikulum mengumumkan bahwa jadwal pelajaran resmi Tahun Pelajaran 2026/2027 telah aktif. Seluruh peserta didik kelas X, XI, dan XII diimbau memeriksa jadwal masing-masing melalui menu Jadwal Pelajaran pada portal ini atau mengunduh dokumen PDF lengkap.',
+    summary: 'Jadwal pelajaran teori & praktek semester ganjil TP 2026/2027 telah disahkan oleh Kepala Sekolah Budiman Sitorus, SE dan Waka Kurikulum Wirwan Rizon, S.Kom.',
+    content: 'Wakil Kepala Sekolah Bidang Kurikulum mengumumkan bahwa jadwal pelajaran resmi Tahun Pelajaran 2026/2027 telah aktif. Seluruh peserta didik kelas X, XI, dan XII diimbau memeriksa jadwal masing-masing melalui menu Jadwal Pelajaran pada portal ini.',
     image: '/assets/images/gedung-sekolah.jpg'
   }
 ];
@@ -893,5 +923,477 @@ export const JOB_VACANCIES: JobVacancy[] = [
       'Pengalaman praktikum merakit panel distribusi & kontrol kontaktor',
       'Teliti dan patuh prosedur keselamatan kerja listrik'
     ]
+  }
+];
+
+export interface TkaPhase {
+  phase: string;
+  time: string;
+  desc: string;
+}
+
+export interface TkaSubject {
+  name: string;
+  duration: string;
+  desc: string;
+}
+
+export interface TkaRequirement {
+  title: string;
+  desc: string;
+}
+
+export interface TkaProhibition {
+  title: string;
+  desc: string;
+  severity: 'Teguran Keras' | 'Diskualifikasi Ujian' | 'Pembatalan SHTKA & Gugur';
+}
+
+export interface TkaVocationalChoice {
+  majorCode: string;
+  majorName: string;
+  options: {
+    code: string;
+    name: string;
+    focus: string;
+  }[];
+}
+
+export interface TkaData {
+  ministryInfo: {
+    ministry: string;
+    minister: string;
+    description: string;
+    legalBases: { title: string; desc: string; link?: string }[];
+  };
+  officialSchedule: {
+    periodTitle: string;
+    timeline: { date: string; activity: string; note: string }[];
+    officialTimeSchedule: {
+      subject: string;
+      duration: string;
+      description: string;
+    }[];
+    timeNotice: string;
+  };
+  participantRequirements: {
+    summary: string;
+    items: TkaRequirement[];
+  };
+  subjectChoices: {
+    generalSubjects: TkaSubject[];
+    vocationalChoices: TkaVocationalChoice[];
+    selectionRule: string;
+  };
+  prohibitions: {
+    summary: string;
+    items: TkaProhibition[];
+    sanctionNotice: string;
+  };
+  examDurationRules: {
+    generalDuration: string;
+    vocationalDuration: string;
+    tardinessTolerance: string;
+    rules: string[];
+  };
+  previousYear: {
+    period: string;
+    summary: string;
+    stats: { label: string; value: string; category: string; note: string }[];
+    evaluations: string[];
+    followUps: string[];
+  };
+  nextYear: {
+    period: string;
+    summary: string;
+    roadmaps: { title: string; desc: string; icon: string }[];
+  };
+  faq: { q: string; a: string }[];
+  officialReferences: { title: string; source: string; note: string }[];
+}
+
+export const TKA_DATA: TkaData = {
+  ministryInfo: {
+    ministry: 'Kementerian Pendidikan Dasar dan Menengah (Kemendikdasmen) Republik Indonesia',
+    minister: 'Prof. Dr. Abdul Mu’ti, M.Ed.',
+    description: 'Tes Kemampuan Akademik (TKA) adalah asesmen standar nasional yang diselenggarakan oleh Kementerian Pendidikan Dasar dan Menengah untuk mengukur capaian akademik individu murid secara objektif, berkeadilan, dan terstandar nasional. TKA melengkapi penilaian sekolah tanpa menjadi penentu tunggal kelulusan.',
+    legalBases: [
+      {
+        title: 'Permendikdasmen Nomor 9 Tahun 2025',
+        desc: 'Tentang Penyelenggaraan Tes Kemampuan Akademik (TKA) pada Jenjang Pendidikan Dasar dan Menengah.'
+      },
+      {
+        title: 'Permendikdasmen Nomor 13 Tahun 2025',
+        desc: 'Tentang Pendekatan Pembelajaran Mendalam (Deep Learning: Mindful, Meaningful, dan Joyful Learning).'
+      },
+      {
+        title: 'Keputusan Kepala BSKAP Kemendikdasmen',
+        desc: 'Tentang Kerangka Asesmen Terpadu dan Petunjuk Teknis Integrasi TKA dengan Asesmen Nasional (ANBK).'
+      }
+    ]
+  },
+  officialSchedule: {
+    periodTitle: 'Jadwal Resmi Pelaksanaan TKA Tahun Ajaran 2026/2027 (Kemendikdasmen)',
+    timeNotice: 'Catatan: Pelaksanaan Tes Kemampuan Akademik (TKA) diselenggarakan secara serentak terstandar nasional berbasis CBT sesuai petunjuk teknis resmi Kemendikdasmen RI. Peserta wajib hadir di sekolah 30 menit sebelum jadwal mata uji untuk verifikasi identitas dan login sistem CBT.',
+    timeline: [
+      {
+        date: 'Agustus - September 2026',
+        activity: 'Verifikasi & Sinkronisasi DNT Peserta',
+        note: 'Validasi data NISN, konsentrasi keahlian, dan pengecekan sinkronisasi ke server pusat Pusdatin Kemendikdasmen.'
+      },
+      {
+        date: 'Awal Oktober 2026',
+        activity: 'Simulasi Nasional CBT Mandiri',
+        note: 'Uji coba kelancaran sistem aplikasi CBT, adaptasi peserta terhadap tipe soal penalaran studi kasus, dan ketahanan server.'
+      },
+      {
+        date: 'Pertengahan Oktober 2026',
+        activity: 'Gladi Bersih Serentak Nasional',
+        note: 'Gladi bersih wajib dengan protokol proktor pusat dan pengawasan silang antar-satuan pendidikan.'
+      },
+      {
+        date: 'November 2026',
+        activity: 'Pelaksanaan Ujian Utama TKA Gelombang 1 & 2',
+        note: 'Pelaksanaan ujian utama TKA terstandar nasional secara serentak untuk menguji Literasi Membaca, Numerasi Matematika Terapan, Bahasa Inggris, dan Konsentrasi Kejuruan.'
+      },
+      {
+        date: 'Desember 2026',
+        activity: 'Rilis & Penerbitan Dokumen Resmi SHTKA',
+        note: 'Penerbitan Sertifikat Hasil TKA (SHTKA) ber-QR Code resmi Kemendikdasmen untuk portofolio SNBP/SNBT & rekrutmen kerja industri.'
+      }
+    ],
+    officialTimeSchedule: [
+      {
+        subject: 'Literasi Bahasa Indonesia Terapan',
+        duration: '90 Menit',
+        description: 'Penalaran informasi kontekstual, pemahaman teks instruksi kerja teknik, dan analisis dokumen vokasi.'
+      },
+      {
+        subject: 'Numerasi & Matematika Terapan',
+        duration: '90 Menit',
+        description: 'Pemecahan masalah kuantitatif, logika data statistik, pengukuran presisi, dan kalkulasi dasar teknik.'
+      },
+      {
+        subject: 'Bahasa Inggris Komunikasi Vokasi',
+        duration: '60 Menit',
+        description: 'Pemahaman manual teknis bahasa Inggris, standard operating procedure (SOP), dan komunikasi bisnis kerja.'
+      },
+      {
+        subject: 'Teori Konsentrasi Kejuruan (TKJ / TKR / TITL / TBSM)',
+        duration: '120 Menit',
+        description: 'Pengujian mendalam teori kejuruan spesifik kompetensi keahlian masing-masing jurusan berstandar nasional.'
+      }
+    ]
+  },
+  participantRequirements: {
+    summary: 'Seluruh peserta didik yang mengikuti TKA Kemendikdasmen di SMK Budi Murni 1 wajib memenuhi persyaratan administratif dan akademik resmi berikut:',
+    items: [
+      {
+        title: 'Terdaftar Aktif di Dapodik Kemendikdasmen',
+        desc: 'Peserta wajib terdata secara sah dan aktif dalam Data Pokok Pendidikan (Dapodik) jenjang Sekolah Menengah Kejuruan.'
+      },
+      {
+        title: 'Memiliki NISN Valid & Terverifikasi',
+        desc: 'Nomor Induk Siswa Nasional (NISN) harus berstatus valid dan telah disinkronkan dengan Pusdatin Kemendikdasmen.'
+      },
+      {
+        title: 'Siswa Aktif Tingkat Akhir (Kelas XII)',
+        desc: 'TKA diperuntukkan bagi seluruh murid kelas XII SMK Budi Murni 1 dari konsentrasi keahlian TKJ, TKR, TITL, dan TBSM.'
+      },
+      {
+        title: 'Ketuntasan Capaian Belajar Semester 1 - 5',
+        desc: 'Telah menuntaskan seluruh beban sks / kompetensi pembelajaran intrakurikuler dari semester 1 hingga semester 5.'
+      },
+      {
+        title: 'Presensi Kehadiran KBM Minimal 85%',
+        desc: 'Memenuhi batas kehadiran kumulatif kegiatan belajar mengajar di sekolah minimal 85% pada tahun ajaran berjalan.'
+      },
+      {
+        title: 'Wajib Mengikuti Simulasi & Gladi Bersih CBT',
+        desc: 'Telah mengikuti tahapan uji coba simulasi dan gladi bersih resmi Kemendikdasmen sebelum pelaksanaan hari H.'
+      },
+      {
+        title: 'Membawa Kartu Tanda Peserta TKA Resmi',
+        desc: 'Wajib membawa Kartu Peserta Ujian berfoto dan ber-barcode yang telah disahkan oleh pihak sekolah.'
+      }
+    ]
+  },
+  subjectChoices: {
+    selectionRule: 'Ketentuan Mata Uji Kemendikdasmen: Setiap peserta didik wajib menempuh 3 Mata Pelajaran Inti Nasional dan memilih 2 Mata Pelajaran Pilihan Kejuruan sesuai konsentrasi keahliannya masing-masing.',
+    generalSubjects: [
+      {
+        name: 'Bahasa Indonesia (Literasi)',
+        duration: '90 Menit',
+        desc: 'Pemahaman teks informasi teknis kejuruan, telaah dokumen SOP industri, penalaran kritis bacaan ilmiah terapan, dan komunikasi kerja.'
+      },
+      {
+        name: 'Matematika (Numerasi Terapan)',
+        duration: '90 Menit',
+        desc: 'Kalkulasi teknik terapan, aljabar, statistik produksi, geometri ruang, dan interpretasi grafik/data kuantitatif industri.'
+      },
+      {
+        name: 'Bahasa Inggris Vokasi',
+        duration: '90 Menit',
+        desc: 'Reading technical manuals, pemahaman instruksi keselamatan kerja (K3), korespondensi profesional, dan technical terms.'
+      }
+    ],
+    vocationalChoices: [
+      {
+        majorCode: 'TKJ',
+        majorName: 'Teknik Komputer dan Jaringan',
+        options: [
+          {
+            code: 'TKJ-1',
+            name: 'Administrasi Infrastruktur Jaringan & Routing',
+            focus: 'Konfigurasi Mikrotik, Cisco, switching, VLAN, routing dinamis (OSPF/BGP), dan manajemen bandwidth internet.'
+          },
+          {
+            code: 'TKJ-2',
+            name: 'Keamanan Jaringan, Server Linux & Cloud Computing',
+            focus: 'Hardening server berbasis Linux Debian/Ubuntu, virtualisasi Proxmox, firewall filtering, dan layanan cloud terdistribusi.'
+          }
+        ]
+      },
+      {
+        majorCode: 'TKR',
+        majorName: 'Teknik Kendaraan Ringan (Otomotif Mobil)',
+        options: [
+          {
+            code: 'TKR-1',
+            name: 'Sistem Pemeliharaan Mesin & Chasis Otomotif',
+            focus: 'Mekanisme motor bakar 4 langkah, tune-up mesin EFI, sistem kemudi, suspensi, pengereman ABS, dan transmisi manual/otomatis.'
+          },
+          {
+            code: 'TKR-2',
+            name: 'Diagnostik Kelistrikan Kendaraan & Sistem EFI Modern',
+            focus: 'Troubleshooting ECU, sensor & aktuator injeksi menggunakan scanner OBD-II, sistem AC mobil, dan kelistrikan bodi.'
+          }
+        ]
+      },
+      {
+        majorCode: 'TITL',
+        majorName: 'Teknik Instalasi Tenaga Listrik',
+        options: [
+          {
+            code: 'TITL-1',
+            name: 'Instalasi Tenaga Listrik & Penerangan Bangunan',
+            focus: 'Perancangan gambar sirkit penerangan 1 fasa & 3 fasa, panel distribusi utama (MDP), pentanahan (grounding), dan PUIL 2020.'
+          },
+          {
+            code: 'TITL-2',
+            name: 'Sistem Kendali Motor Listrik, Otomasi & PLC',
+            focus: 'Pengawatan kontaktor magnetik sistem DOL/Star-Delta, pemrograman PLC Omron/Siemens, dan sistem proteksi beban lebih.'
+          }
+        ]
+      },
+      {
+        majorCode: 'TBSM',
+        majorName: 'Teknik dan Bisnis Sepeda Motor',
+        options: [
+          {
+            code: 'TBSM-1',
+            name: 'Sistem Mesin & Transmisi Sepeda Motor',
+            focus: 'Overhaul kepala silinder, katup, piston, sistem pendinginan, kopling basah/kering, dan sistem transmisi matik CVT.'
+          },
+          {
+            code: 'TBSM-2',
+            name: 'Sistem Bahan Bakar Injeksi (PGM-FI) & Kelistrikan Motor',
+            focus: 'Reset ECM/ECU, pembacaan kode MIL, pompa bahan bakar injektor, sistem pengapian DC-CDI/TCI, dan baterai kelistrikan.'
+          }
+        ]
+      }
+    ]
+  },
+  prohibitions: {
+    summary: 'Demi menjaga integritas, objektivitas, dan standarisasi nasional, Kemendikdasmen menetapkan larangan ketat selama pelaksanaan TKA berlangsung:',
+    sanctionNotice: 'Pelanggaran terhadap tata tertib di atas akan dikenakan sanksi berjenjang mulai dari teguran tertulis, diskualifikasi ujian, hingga pembatalan Sertifikat Hasil TKA (SHTKA) nasional.',
+    items: [
+      {
+        title: 'Dilarang Membawa Smartphone, Gawai & Jam Pintar',
+        desc: 'Peserta dilarang membawa smartphone/HP, tablet, smartwatch/jam pintar, kamera, alat rekam, atau headset ke meja ujian.',
+        severity: 'Diskualifikasi Ujian'
+      },
+      {
+        title: 'Dilarang Membuka Tab Browser Lain atau Aplikasi Eksternal',
+        desc: 'Aplikasi CBT TKA terproteksi sistem lockdown. Membuka tab browser lain, aplikasi kalkulator, atau remote desktop akan langsung memblokir akun ujian.',
+        severity: 'Diskualifikasi Ujian'
+      },
+      {
+        title: 'Dilarang Membawa Catatan, Rumus, atau Contekan Fisik',
+        desc: 'Peserta dilarang membawa kertas catatan, buku panduan, atau coretan rumus dari luar. Kertas buram resmi disediakan langsung oleh pengawas.',
+        severity: 'Diskualifikasi Ujian'
+      },
+      {
+        title: 'Dilarang Berbicara, Berbisik, atau Bertanya Antar-Peserta',
+        desc: 'Dilarang saling menoleh, berbisik, memberi kode/isyarat, atau meminjamkan alat tulis selama ujian berlangsung.',
+        severity: 'Teguran Keras'
+      },
+      {
+        title: 'Dilarang Memotret atau Menyebarluaskan Soal Ujian',
+        desc: 'Mengambil foto layar monitor, merekam video, atau menyebarkan butir soal ke media sosial merupakan pelanggaran hukum berat atas kerahasiaan dokumen negara.',
+        severity: 'Pembatalan SHTKA & Gugur'
+      },
+      {
+        title: 'Dilarang Meninggalkan Ruang Ujian Tanpa Izin Pengawas',
+        desc: 'Peserta tidak diperkenankan keluar dari ruang ujian sebelum waktu pengerjaan berakhir tanpa izin dan pendampingan petugas pengawas.',
+        severity: 'Teguran Keras'
+      },
+      {
+        title: 'Dilarang Menggunakan Joki atau Pengganti Peserta',
+        desc: 'Segala bentuk perjokian berakibat pembatalan status peserta secara permanen, sanksi skorsing sekolah, dan penuntutan sesuai regulasi Kemendikdasmen.',
+        severity: 'Pembatalan SHTKA & Gugur'
+      }
+    ]
+  },
+  examDurationRules: {
+    generalDuration: '90 Menit per Mata Uji Umum (Literasi & Numerasi)',
+    vocationalDuration: '120 Menit per Mata Uji Teori Konsentrasi Kejuruan',
+    tardinessTolerance: 'Maksimal 15 Menit setelah waktu ujian dimulai (tanpa tambahan perpanjangan waktu pengerjaan)',
+    rules: [
+      'Setiap peserta wajib hadir 30 menit sebelum jadwal ujian dimulai untuk pemeriksaan kartu peserta dan sterilisasi.',
+      'Waktu pengerjaan dihitung otomatis oleh sistem CBT Kemendikdasmen begitu tombol "Mulai Ujian" diaktifkan.',
+      'Siswa yang terlambat kurang dari 15 menit tetap diperbolehkan masuk, namun tidak mendapat perpanjangan waktu tambahan.',
+      'Siswa yang terlambat lebih dari 15 menit dinyatakan berhalangan dan wajib melapor ke Panitia Sekolah untuk penjadwalan ujian susulan resmi.',
+      'Apabila terjadi gangguan teknis jaringan/listrik, waktu pengerjaan pada sistem server pusat secara otomatis membekukan sisa durasi (waktu tidak berkurang).'
+    ]
+  },
+  previousYear: {
+    period: 'Tahun Lalu / Periode Evaluasi (Transisi ANBK & TKA Tahap Awal)',
+    summary: 'Pada periode sebelumnya, evaluasi sistem pendidikan berfokus pada Asesmen Nasional (ANBK) serta pemetaan awal kemampuan akademik siswa SMK di DKI Jakarta. Hasil Rapor Pendidikan SMK Budi Murni 1 menunjukkan tren positif dengan predikat Sangat Baik.',
+    stats: [
+      { label: 'Kemampuan Literasi Membaca', value: '82.4 / 100', category: 'Cakap', note: 'Mencakup pemahaman teks informasi teknis & dokumen kerja industri.' },
+      { label: 'Kemampuan Numerasi', value: '78.9 / 100', category: 'Baik (+5.2 poin)', note: 'Peningkatan logika kuantitatif, statistik terapan, & kalkulasi teknik.' },
+      { label: 'Indeks Karakter Siswa', value: '84.1 / 100', category: 'Membudaya', note: 'Nilai integritas, kemandirian, gotong royong, & profil Pelajar Pancasila.' },
+      { label: 'Iklim Keamanan & Disiplin Belajar', value: '88.5 / 100', category: 'Sangat Baik', note: 'Suasana sekolah kondusif, toleran, anti-bullying, & budaya kerja industri.' }
+    ],
+    evaluations: [
+      'Kemampuan literasi teknis siswa SMK Budi Murni 1 berada di kuartil atas se-Jakarta Timur.',
+      'Perlu penguatan berkesinambungan pada penalaran matematika terapan (kalkulasi tegangan listrik TITL & rasio kompresi mesin otomotif TKR/TBSM).',
+      'Penyelarasan budaya literasi digital di laboratorium komputer TKJ terbukti meningkatkan kecepatan analisis soal berbasis studi kasus.'
+    ],
+    followUps: [
+      'Penyusunan modul pengayaan literasi-numerasi terintegrasi mata pelajaran kejuruan.',
+      'Optimalisasi simulasi komputer CBT mandiri sebelum pelaksanaan ujian resmi.',
+      'Pelatihan guru dalam menyusun soal-soal penalaran Higher Order Thinking Skills (HOTS).'
+    ]
+  },
+  nextYear: {
+    period: 'Tahun Depan (Tahun Ajaran 2027/2028 ke Depan) - Desain Masa Depan & Integrasi Strategis',
+    summary: 'Kemendikdasmen merancang TKA ke depan sebagai instrumen terintegrasi yang menghubungkan pendidikan vokasi dengan ekosistem perguruan tinggi dan industri, sejalan dengan visi Indonesia Emas 2045.',
+    roadmaps: [
+      {
+        title: 'Integrasi SHTKA dengan Seleksi Nasional PTN Vokasi',
+        desc: 'Sertifikat Hasil TKA (SHTKA) menjadi salah satu portofolio utama pada SNBP (Seleksi Nasional Berdasarkan Prestasi) dan SNBT untuk masuk Politeknik Negeri maupun program vokasi universitas negeri terkemuka.',
+        icon: 'GraduationCap'
+      },
+      {
+        title: 'Penguatan Pendekatan Deep Learning (HOTS Terapan)',
+        desc: 'Penyusunan instrumen soal berbasis pendekatan Deep Learning (Mindful, Meaningful, Joyful) yang mengutamakan daya analisis mendalam, pemikiran komputasional, serta kreativitas solusi teknik nyata.',
+        icon: 'Sparkles'
+      },
+      {
+        title: 'Sinkronisasi dengan Sertifikasi BNSP / LSP-P1',
+        desc: 'Penyelarasan hasil capaian akademik TKA dengan skema Sertifikasi Profesi BNSP di SMK Budi Murni 1, memberikan pengakuan ganda (akademik nasional dan lisensi kompetensi kerja).',
+        icon: 'Award'
+      },
+      {
+        title: 'Standardisasi Penyerapan Tenaga Kerja Rekanan BKK',
+        desc: 'Mitra industri strategis BKK SMK Budi Murni 1 (seperti grup Astra, PLN, Telkom) menjadikan skor SHTKA sebagai kriteria verifikasi kemampuan berpikir analitis calon teknisi profesional.',
+        icon: 'Briefcase'
+      }
+    ]
+  },
+  faq: [
+    {
+      q: 'Apakah TKA menentukan kelulusan siswa dari SMK Budi Murni 1?',
+      a: 'Tidak. Sesuai Permendikdasmen Nomor 9 Tahun 2025, TKA tidak menjadi penentu tunggal kelulusan siswa. Kelulusan tetap menjadi kewenangan penuh satuan pendidikan berdasarkan kriteria penyelesaian seluruh program pembelajaran, ujian sekolah, dan sikap/akhlak mulia.'
+    },
+    {
+      q: 'Apa manfaat Sertifikat Hasil TKA (SHTKA) bagi siswa SMK Budi Murni 1?',
+      a: 'SHTKA menjadi dokumen portofolio resmi berstandar nasional yang digunakan untuk seleksi perguruan tinggi negeri (SNBP/SNBT vokasi), pertimbangan beasiswa, dan dokumen verifikasi kompetensi akademik saat melamar kerja melalui Bursa Kerja Khusus (BKK).'
+    },
+    {
+      q: 'Bagaimana jika siswa berhalangan hadir atau terlambat saat jadwal TKA?',
+      a: 'Toleransi keterlambatan maksimal adalah 15 menit setelah waktu ujian dimulai tanpa perpanjangan durasi waktu. Jika terlambat lebih dari 15 menit atau berhalangan karena sakit resmi, siswa wajib melapor ke Panitia Sekolah untuk dijadwalkan mengikuti ujian susulan resmi.'
+    },
+    {
+      q: 'Bagaimana alur teknis pengerjaan ujian CBT di laboratorium sekolah?',
+      a: 'Setiap peserta menggunakan workstation komputer sekolah yang telah terinstal sistem CBT aman terhubung ke server Kemendikdasmen. Proktor ruangan akan merilis token ujian pada saat waktu pengerjaan dimulai.'
+    },
+    {
+      q: 'Apakah pelaksanaan TKA dipungut biaya?',
+      a: 'Tidak ada pungutan biaya. Pelaksanaan TKA resmi diselenggarakan oleh Kemendikdasmen bekerja sama dengan sekolah melalui pendanaan Bantuan Operasional Sekolah (BOS) dan sarana sekolah yang telah disediakan lengkap.'
+    }
+  ],
+  officialReferences: [
+    {
+      title: 'Portal Resmi Kementerian Pendidikan Dasar dan Menengah RI',
+      source: 'kemendikdasmen.go.id',
+      note: 'Informasi kebijakan terpadu, rilis pers menteri, dan regulasi pendidikan nasional.'
+    },
+    {
+      title: 'Badan Standar, Kurikulum, dan Asesmen Pendidikan (BSKAP)',
+      source: 'bskap.kemdikbud.go.id / bskap.kemendikdasmen.go.id',
+      note: 'Kerangka konseptual asesmen, capaian pembelajaran, dan panduan teknis asesmen.'
+    },
+    {
+      title: 'Balai Pengelolaan Pengujian Pendidikan (BPPP)',
+      source: 'bppp.kemdikbud.go.id',
+      note: 'Pelaksana teknis pengujian terstandar nasional jenjang pendidikan dasar dan menengah.'
+    },
+    {
+      title: 'Rapor Pendidikan Satuan Pendidikan',
+      source: 'raporpendidikan.kemdikbud.go.id',
+      note: 'Indikator mutu layanan pendidikan, literasi, numerasi, dan iklim keamanan sekolah.'
+    }
+  ]
+};
+
+export interface SchoolAgenda {
+  id: string;
+  title: string;
+  date: string;
+  category: 'Akademik' | 'Kesiswaan' | 'Ujian' | 'Industri';
+  time: string;
+  location: string;
+  desc: string;
+}
+
+export const SCHOOL_AGENDA: SchoolAgenda[] = [
+  {
+    id: 'agenda-1',
+    title: 'Pekan Olahraga & Seni Siswa (PORSENI) Antar-Jurusan Budi Murni',
+    date: '15 - 18 Oktober 2026',
+    category: 'Kesiswaan',
+    time: '07.30 - 15.00 WIB',
+    location: 'Lapangan Utama & Aula Sekolah',
+    desc: 'Kompetisi futsal, basket, voli, dan unjuk bakat kreasi seni antar-jurusan TKJ, TKR, TITL, dan TBSM.'
+  },
+  {
+    id: 'agenda-2',
+    title: 'Workshop Penyelarasan Kurikulum Vokasi dengan Mitra Industri Astra & PLN',
+    date: '24 Oktober 2026',
+    category: 'Industri',
+    time: '08.30 - 14.00 WIB',
+    location: 'Aula Multimedia Lantai 2',
+    desc: 'Pertemuan sinkronisasi silabus kejuruan bersama praktisi industri DUDI dan Waka Kurikulum.'
+  },
+  {
+    id: 'agenda-3',
+    title: 'Ujian Tengah Semester (UTS) Ganjil TP 2026/2027',
+    date: '2 - 7 November 2026',
+    category: 'Akademik',
+    time: '07.00 - 13.00 WIB',
+    location: 'Ruang Kelas Masing-masing',
+    desc: 'Penilaian Sumatif Tengah Semester ganjil untuk kelas X, XI, dan XII mengacu pada Kurikulum Merdeka.'
+  },
+  {
+    id: 'agenda-4',
+    title: 'Bursa Rekrutmen Kampus & Seleksi Magang Industri BKK',
+    date: '18 November 2026',
+    category: 'Industri',
+    time: '08.00 - 15.00 WIB',
+    location: 'Ruang BKK & Bengkel Praktik',
+    desc: 'Walk-in interview dan tes fisik calon teknisi untuk penempatan di jaringan bengkel resmi dan manufaktur.'
   }
 ];

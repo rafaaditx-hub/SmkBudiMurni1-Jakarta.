@@ -4,9 +4,11 @@ import {
   Compass, 
   CheckCircle2, 
   Calendar, 
-  Sparkles
+  Sparkles,
+  GraduationCap
 } from 'lucide-react';
-import { SCHOOL_INFO, TEACHERS_LIST, TeacherData } from '../data/schoolData';
+import { SCHOOL_INFO, TEACHERS_LIST, TeacherData, FACILITIES } from '../data/schoolData';
+import { PrincipalAvatar } from '../components/PrincipalAvatar';
 
 export const ProfilePage: React.FC = () => {
   const missions = [
@@ -93,8 +95,8 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       {/* Sejarah Singkat SMK Budi Murni 1 (Requested by User) */}
-      <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-6">
-        <div className="max-w-3xl space-y-4">
+      <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="lg:col-span-7 space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-xs font-bold border border-amber-200">
             <Calendar className="w-3.5 h-3.5" />
             <span>Sejarah & Kilas Balik Pendirian (9 November 1984)</span>
@@ -107,6 +109,29 @@ export const ProfilePage: React.FC = () => {
           </p>
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-1">
             <strong>Komitmen Mutu Vokasi:</strong> Seluruh program keahlian diselaraskan dengan Standar Kompetensi Kerja Nasional Indonesia (SKKNI) dan sertifikasi Badan Nasional Sertifikasi Profesi (BNSP), didukung Bursa Kerja Khusus (BKK) resmi binaan Disnakertrans DKI Jakarta.
+          </div>
+        </div>
+
+        <div className="lg:col-span-5 relative">
+          <div className="rounded-2xl overflow-hidden shadow-lg border-2 border-slate-200 bg-slate-100 relative group">
+            <img 
+              src="/assets/images/gedung-sekolah.jpg" 
+              alt="Kampus SMK Budi Murni 1 Jakarta" 
+              className="w-full h-64 sm:h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4">
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/assets/images/logo-smk.jpg" 
+                  alt="Logo SMK" 
+                  className="w-10 h-10 rounded-xl bg-white p-1 shadow-md shrink-0" 
+                />
+                <div>
+                  <h4 className="text-white text-xs font-extrabold">Gedung Kampus SMK Budi Murni 1</h4>
+                  <p className="text-slate-300 text-[10px]">Duren Sawit, Jakarta Timur</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -126,29 +151,65 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {TEACHERS_LIST.map((teacher: TeacherData) => (
-            <div 
-              key={teacher.code}
-              className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3"
-            >
-              <div className="flex items-start justify-between">
-                <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 font-mono font-bold text-xs flex items-center justify-center">
-                  {teacher.code}
-                </span>
-                <span className="text-[10px] font-bold text-slate-400">Kode Guru</span>
-              </div>
+          {TEACHERS_LIST.map((teacher: TeacherData) => {
+            const isPrincipal = teacher.code === '1';
+            return (
+              <div 
+                key={teacher.code}
+                className={`bg-white rounded-2xl p-5 border transition-all flex flex-col justify-between space-y-3 ${
+                  isPrincipal 
+                    ? 'border-blue-300 ring-2 ring-blue-600/20 shadow-md sm:col-span-2 lg:col-span-2 bg-gradient-to-br from-blue-50/40 via-white to-white' 
+                    : 'border-slate-200 shadow-xs hover:shadow-md'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    {isPrincipal ? (
+                      <PrincipalAvatar size="lg" showBadge={true} />
+                    ) : (
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center border border-slate-200 shrink-0 font-mono">
+                        {teacher.code}
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold text-slate-400">Kode Guru:</span>
+                        <span className="font-mono font-extrabold text-blue-700 text-xs">{teacher.code}</span>
+                        {isPrincipal && (
+                          <span className="ml-1.5 px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold">
+                            Kepala Sekolah
+                          </span>
+                        )}
+                      </div>
+                      <h3 className={`font-bold text-slate-900 leading-snug ${isPrincipal ? 'text-sm sm:text-base' : 'text-xs'}`}>
+                        {teacher.name}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
 
-              <div className="space-y-1">
-                <h3 className="font-bold text-slate-900 text-xs leading-snug">{teacher.name}</h3>
-                <p className="text-[11px] text-blue-700 font-medium">{teacher.subject}</p>
-                {teacher.role && (
-                  <span className="inline-block mt-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[10px] font-bold">
-                    {teacher.role}
-                  </span>
-                )}
+                <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-slate-500 font-medium">Mata Pelajaran:</span>
+                    <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                      {teacher.subject}
+                    </span>
+                  </div>
+                  {teacher.role && (
+                    <div className="text-[10px] text-emerald-800 bg-emerald-50 px-2 py-1 rounded-md font-medium">
+                      {teacher.role}
+                    </div>
+                  )}
+                  {teacher.education && (
+                    <div className="text-[10px] text-slate-400 flex items-center gap-1">
+                      <GraduationCap className="w-3 h-3 text-slate-400 shrink-0" />
+                      <span>{teacher.education}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

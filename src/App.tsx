@@ -13,6 +13,8 @@ import { ActivitiesPage } from './pages/ActivitiesPage';
 import { NewsPage } from './pages/NewsPage';
 import { ContactPage } from './pages/ContactPage';
 import { PortalPage } from './pages/PortalPage';
+import { TkaPage } from './pages/TkaPage';
+import { TataTertibPage } from './pages/TataTertibPage';
 import { MessageCircle, ArrowUp } from 'lucide-react';
 import { SCHOOL_INFO } from './data/schoolData';
 import { supabase, UserProfile } from './lib/supabase';
@@ -26,7 +28,13 @@ export const App: React.FC = () => {
     const saved = localStorage.getItem('bm1_user_profile');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Hapus akun demo tersimpan agar wajib login / daftar akun resmi
+        if (parsed?.id?.startsWith('demo-') || parsed?.email?.includes('demo')) {
+          localStorage.removeItem('bm1_user_profile');
+          return null;
+        }
+        return parsed;
       } catch (e) {
         return null;
       }
@@ -127,11 +135,11 @@ export const App: React.FC = () => {
           />
         )}
 
-        {activeTab === 'tentang' && (
+        {(activeTab === 'tentang' || activeTab === 'profil') && (
           <ProfilePage />
         )}
 
-        {activeTab === 'program' && (
+        {(activeTab === 'program' || activeTab === 'jurusan') && (
           <MajorsPage 
             selectedMajorId={selectedMajorId}
             onNavigatePpdb={handleOpenPpdb}
@@ -162,8 +170,16 @@ export const App: React.FC = () => {
           <ActivitiesPage />
         )}
 
+        {activeTab === 'tatatertib' && (
+          <TataTertibPage />
+        )}
+
         {activeTab === 'bkk' && (
           <BkkPage />
+        )}
+
+        {activeTab === 'tka' && (
+          <TkaPage />
         )}
 
         {activeTab === 'berita' && (
