@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import kepsekRealPhoto from '../assets/images/kepsek.jpg';
+
+const kepsekRealPhoto = '/assets/images/kepsek.jpg';
 
 interface PrincipalAvatarProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';

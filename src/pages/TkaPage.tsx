@@ -76,13 +76,20 @@ export const TkaPage: React.FC = () => {
             Pusat informasi resmi penyelenggaraan <strong>Tes Kemampuan Akademik (TKA)</strong> tingkat nasional di bawah kepemimpinan Menteri Pendidikan Dasar dan Menengah <strong>Prof. Dr. Abdul Mu’ti, M.Ed.</strong> Menstandarkan capaian literasi, numerasi terapan, dan kejuruan murid SMK Budi Murni 1 menuju lulusan vokasi yang kompeten dan berkarakter.
           </p>
 
-          {/* Ministry Note Box */}
-          <div className="pt-2">
-            <div className="inline-flex items-start gap-3 bg-white/10 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-white/15 text-xs sm:text-sm text-slate-200">
-              <Info className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
-              <p>
-                <strong>Halaman Khusus TKA:</strong> Informasi jadwal resmi, syarat keikutsertaan, mata pelajaran pilihan kejuruan, tata tertib larangan, dan alokasi waktu ujian terangkum lengkap di halaman ini tanpa tercampur dengan aktivitas umum sekolah.
-              </p>
+          {/* Ministry Portal Direct Banner */}
+          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <a
+              href="https://tka.kemendikdasmen.go.id/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] duration-200 group"
+            >
+              <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              <span>Buka Website Resmi: tka.kemendikdasmen.go.id</span>
+            </a>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-2xl px-4 py-2.5 border border-white/15 text-xs text-slate-200">
+              <Info className="w-4 h-4 text-amber-300 shrink-0" />
+              <span>Portal Asesmen &amp; CBT Resmi Kemendikdasmen RI</span>
             </div>
           </div>
         </div>

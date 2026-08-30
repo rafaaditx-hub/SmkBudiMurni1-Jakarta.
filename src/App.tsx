@@ -14,7 +14,6 @@ import { NewsPage } from './pages/NewsPage';
 import { ContactPage } from './pages/ContactPage';
 import { PortalPage } from './pages/PortalPage';
 import { TkaPage } from './pages/TkaPage';
-import { TataTertibPage } from './pages/TataTertibPage';
 import { MessageCircle, ArrowUp } from 'lucide-react';
 import { SCHOOL_INFO } from './data/schoolData';
 import { supabase, UserProfile } from './lib/supabase';
@@ -170,10 +169,6 @@ export const App: React.FC = () => {
           <ActivitiesPage />
         )}
 
-        {activeTab === 'tatatertib' && (
-          <TataTertibPage />
-        )}
-
         {activeTab === 'bkk' && (
           <BkkPage />
         )}
@@ -220,7 +215,7 @@ export const App: React.FC = () => {
           title="Hubungi Admin via WhatsApp"
         >
           <MessageCircle className="w-5 h-5 fill-current" />
-          <span className="hidden sm:inline font-semibold">Tanya CS SMK Budi Murni 1</span>
+          <span className="hidden sm:inline font-semibold">WA CS BM1</span>
         </a>
 
       </div>

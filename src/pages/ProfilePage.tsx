@@ -213,7 +213,7 @@ export const ProfilePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Ringkasan 7 Fasilitas Utama Sekolah */}
+      {/* Ringkasan Fasilitas Utama Sekolah */}
       <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 space-y-8">
         <div className="max-w-2xl space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
@@ -223,7 +223,7 @@ export const ProfilePage: React.FC = () => {
             Sarana & Prasarana Penunjang Belajar
           </h2>
           <p className="text-xs text-slate-300">
-            7 Fasilitas lengkap untuk menjamin kenyamanan belajar teori, praktik kejuruan, dan pembinaan karakter.
+            Fasilitas sarana prasarana untuk menjamin kenyamanan belajar teori, literasi digital, dan pembinaan karakter.
           </p>
         </div>
 
@@ -235,7 +235,6 @@ export const ProfilePage: React.FC = () => {
                 <span className="text-[10px] font-mono text-slate-400">{fac.category}</span>
               </div>
               <p className="text-slate-300 leading-relaxed text-xs">{fac.description}</p>
-              <p className="text-[11px] text-blue-300 font-medium pt-1">✓ {fac.features[0]}</p>
             </div>
           ))}
         </div>

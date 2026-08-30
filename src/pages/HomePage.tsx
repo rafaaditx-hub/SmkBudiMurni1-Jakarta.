@@ -397,7 +397,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               </div>
               <h3 className="font-extrabold text-slate-900 text-base">Fasilitas Sarana Prasarana</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Bengkel otomotif, lab komputer jaringan, lab kelistrikan, ruang kelas multimedia, dan lapangan.
+                Lab komputer jaringan, perpustakaan digital, mushola ber-AC, dan ruang konseling bimbingan karir BK.
               </p>
             </div>
             <span className="text-xs font-bold text-blue-600 flex items-center gap-1">
@@ -433,9 +433,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                 <Users className="w-5 h-5" />
               </div>
-              <h3 className="font-extrabold text-slate-900 text-base">Layanan Portal Sekolah</h3>
+              <h3 className="font-extrabold text-slate-900 text-base">Layanan Portal Siswa</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Pendaftaran PPDB, info lowongan kerja BKK, cek bantuan PIP/KJP, konseling BK, dan helpdesk.
+                Layanan Bimbingan Konseling & Karir (BK) dan Pusat Layanan Aspirasi & Pengaduan (Helpdesk).
               </p>
             </div>
             <span className="text-xs font-bold text-indigo-600 flex items-center gap-1">
@@ -462,26 +462,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </span>
           </button>
 
-          {/* Card 7: Tata Tertib */}
-          <button
-            onClick={() => onNavigate('tatatertib')}
-            className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-red-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"
-          >
-            <div className="space-y-2">
-              <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold group-hover:bg-red-600 group-hover:text-white transition-colors">
-                <BookOpen className="w-5 h-5" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 text-base">Tata Tertib Siswa TP 2026/2027</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Keputusan resmi Yayasan Budi Murni Jakarta mengenai aturan kehadiran, seragam, etika 5S, larangan keras, dan sanksi.
-              </p>
-            </div>
-            <span className="text-xs font-bold text-red-600 flex items-center gap-1">
-              Buka Halaman <ChevronRight className="w-3.5 h-3.5" />
-            </span>
-          </button>
-
-          {/* Card 8: BKK & Alumni */}
+          {/* Card 7: BKK & Alumni */}
           <button
             onClick={() => onNavigate('bkk')}
             className="text-left bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col justify-between space-y-4"

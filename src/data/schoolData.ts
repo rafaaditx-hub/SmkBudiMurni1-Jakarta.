@@ -30,8 +30,6 @@ export interface Facility {
   shortDesc: string;
   description: string;
   image: string;
-  features: string[];
-  specs: string;
   icon: string;
 }
 
@@ -476,52 +474,15 @@ export const FACILITIES: Facility[] = [
     shortDesc: 'Pusat literasi modern dengan ribuan buku teknik, jurnal kejuruan, dan e-library ber-AC.',
     description: 'Perpustakaan SMK Budi Murni 1 menyediakan ruang baca yang tenang, bersih, dan ber-AC. Dilengkapi sistem otomasi katalog digital, koleksi ribuan buku referensi teknologi komputer, kelistrikan, otomotif, sastra, sains, serta puluhan unit komputer untuk akses jurnal ilmiah dan materi e-book gratis bagi siswa.',
     image: '/assets/images/gedung-sekolah.jpg',
-    features: ['Sistem Katalog E-Library Digital', 'Ruang Baca Nyaman Ber-AC', 'Koleksi Buku Kejuruan Lengkap', 'Stasiun Komputer Riset Siswa'],
-    specs: 'Kapasitas 120 siswa, 5.000+ judul buku teknik & umum, WiFi 100 Mbps',
     icon: 'BookOpen'
   },
   {
-    id: 'uks',
-    name: 'UKS (Unit Kesehatan Sekolah)',
-    category: 'Kesehatan',
-    shortDesc: 'Layanan medis darurat, ruang istirahat pasien, dan kerjasama dengan Puskesmas Cipayung.',
-    description: 'Ruang UKS yang bersih dan steril siap memberikan pertolongan pertama pada kecelakaan (P3K) dan pelayanan kesehatan dasar bagi seluruh siswa dan guru. Dilengkapi tempat tidur pasien terpisah putra/putri, tabung oksigen, tensimeter digital, obat-obatan medis standar, serta didukung pembina PMR dan perawat terlatih.',
-    image: '/assets/images/gedung-sekolah.jpg',
-    features: ['Tempat Tidur Medis Putra & Putri', 'Tabung Oksigen & Kit P3K Lengkap', 'Pemeriksaan Kesehatan Berkala', 'Bekerjasama dengan Puskesmas Cipayung'],
-    specs: '4 Bed medis, Tabung Oksigen, Tensimeter, Kerjasama Faskes Resmi',
-    icon: 'HeartPulse'
-  },
-  {
-    id: 'bengkel',
-    name: 'Bengkel & Workshop Kejuruan Lengkap',
-    category: 'Praktik',
-    shortDesc: 'Bengkel praktik standar industri untuk TKJ, TITL, TBSM, dan TKR.',
-    description: 'SMK Budi Murni 1 memiliki kompleks bengkel dan workshop kejuruan mandiri yang dirancang mengikuti layout industri 5S (Seiri, Seiton, Seiso, Seiketsu, Shitsuke). Tersedia Car Lift 2-Post/4-Post, Bike Lift hidrolik Honda, panel trainer listrik PUIL 2020, PLC Omron, serta toolset mekanik lengkap berstandar pabrikan.',
-    image: '/assets/images/jurusan-tkr.jpg',
-    features: ['Bengkel Mobil TKR ber-Car Lift', 'Bengkel TBSM Standar AHASS Honda', 'Bengkel Panel Listrik & PLC TITL', 'Standar K3 & Keselamatan Kerja Terjamin'],
-    specs: '4 Unit Workshop Khusus, 8 Unit Car/Bike Lift, Standar Industri ATPM',
-    icon: 'Wrench'
-  },
-  {
-    id: 'lapangan',
-    name: 'Lapangan Olahraga & Upacara Multifungsi',
-    category: 'Olahraga',
-    shortDesc: 'Lapangan outdoor luas bertaraf standar untuk Futsal, Basket, Voli, dan Upacara Bendera.',
-    description: 'Lapangan serbaguna dengan permukaan cor halus berstandar turnamen, dilengkapi tiang ring basket kokoh, garis lapangan futsal & voli resmi, serta sound system outdoor untuk pelaksanaan upacara bendera hari Senin, senam sehat, apel kebangsaan, dan latihan ekstrakurikuler.',
-    image: '/assets/images/gedung-sekolah.jpg',
-    features: ['Lapangan Futsal & Sepakbola Mini', 'Lapangan Basket Standar PERBASI', 'Lapangan Bola Voli & Bulutangkis', 'Area Upacara Bendera Khidmat'],
-    specs: 'Luas 1.200 m², Kapasitas 1.500 siswa, Lapisan cat tahan cuaca',
-    icon: 'Trophy'
-  },
-  {
     id: 'mushola',
-    name: 'Mushola / Masjid Al-Ikhlas',
+    name: 'Mushola',
     category: 'Ibadah',
-    shortDesc: 'Tempat ibadah nyaman, sholat berjamaah 5 waktu, sholat Jumat, dan kajian rohis.',
-    description: 'Masjid sekolah yang asri, bersih, dan berpendingin udara (AC) sebagai pusat pembinaan karakter spiritual peserta didik. Digunakan untuk sholat Dhuhur & Ashar berjamaah, Sholat Jumat, peringatan hari besar Islam (PHBI), tadarus pagi, dan kegiatan ekstrakurikuler Hadroh serta Rohis.',
+    shortDesc: 'Tempat ibadah nyaman, sholat berjamaah 5 waktu, dan kegiatan pembinaan rohis.',
+    description: 'Mushola sekolah yang asri, bersih, dan berpendingin udara (AC) sebagai pusat pembinaan karakter spiritual peserta didik. Digunakan untuk sholat Dhuhur & Ashar berjamaah, tadarus pagi, dan kegiatan ekstrakurikuler Hadroh serta Rohis.',
     image: '/assets/images/gedung-sekolah.jpg',
-    features: ['Ruang Sholat Utama Ber-AC', 'Area Wudhu Bersih & Terpisah', 'Pusat Sholat Berjamaah & Sholat Jumat', 'Kegiatan Tahsin & Pengajian Rutin'],
-    specs: 'Kapasitas 400 jamaah, Karpet tebal, Audio sound system masjid berkualitas',
     icon: 'Building2'
   },
   {
@@ -530,9 +491,7 @@ export const FACILITIES: Facility[] = [
     category: 'Akademik',
     shortDesc: 'Lab komputer ber-AC dengan PC spesifikasi tinggi, router MikroTik, Cisco rack, dan fiber optik.',
     description: 'SMK Budi Murni 1 mengoperasikan 4 laboratorium komputer modern ber-AC. Setiap unit PC terhubung internet dedicated fiber optic berkecepatan tinggi, dilengkapi software simulasi jaringan (Cisco Packet Tracer, GNS3), server virtualisasi Proxmox, peralatan splicing kabel fiber optik, dan trainer IoT.',
-    image: '/assets/images/jurusan-tkj.jpg',
-    features: ['120+ Unit PC Intel Core i5/i7 & SSD', 'Perangkat Cisco & MikroTik Router Asli', 'Fusion Splicer Fiber Optic & OTDR', 'Ruangan Full AC & Jaringan Gigabit'],
-    specs: '4 Ruang Lab Terpisah, 160 Workstations, Bandwidth 500 Mbps Dedicated',
+    image: '/assets/images/tkj.jpg',
     icon: 'Cpu'
   },
   {
@@ -542,8 +501,6 @@ export const FACILITIES: Facility[] = [
     shortDesc: 'Layanan konsultasi psikologi, peminatan bakat, bimbingan masalah, dan persiapan karir siswa.',
     description: 'Ruang BK yang ramah dan privat untuk mendampingi tumbuh kembang mental dan akademik peserta didik. Guru BK profesional melayani konseling pribadi, bimbingan belajar, tes psikotes minat bakat kejuruan, penanganan kedisiplinan berkeadilan, serta pembekalan mental siap kerja bekerjasama dengan BKK sekolah.',
     image: '/assets/images/gedung-sekolah.jpg',
-    features: ['Ruang Konseling Privat & Nyaman', 'Asesmen Minat Bakat & Psikotes Siswa', 'Bimbingan Karir & Studi Lanjut', 'Konsultasi Orang Tua & Wali Murid'],
-    specs: 'Ruang konseling kedap suara, Fasilitas tes psikologi, Konselor bersertifikat',
     icon: 'UserCheck'
   }
 ];

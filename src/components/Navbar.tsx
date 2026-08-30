@@ -18,7 +18,8 @@ import {
   Cpu,
   Trophy,
   Newspaper,
-  Palette
+  Palette,
+  ExternalLink
 } from 'lucide-react';
 import { SCHOOL_INFO } from '../data/schoolData';
 import { UserProfile } from '../lib/supabase';
@@ -53,24 +54,34 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Requested Nav items: Beranda, Tentang, Program, Fasilitas, Jadwal, Portal, Kesiswaan, BKK, TKA Kemendikdasmen, Berita, Kontak
+  // Requested Nav items with TKA Kemendikdasmen external link
   const navLinks = [
     { id: 'beranda', label: 'Beranda' },
     { id: 'tentang', label: 'Tentang' },
     { id: 'program', label: 'Program' },
     { id: 'fasilitas', label: 'Fasilitas' },
     { id: 'jadwal', label: 'Jadwal Pelajaran', badge: 'PDF' },
-    { id: 'portal', label: 'Portal Siswa & Guru', badge: 'Login' },
+    { id: 'portal', label: 'Portal Siswa', badge: 'Login' },
     { id: 'kesiswaan', label: 'Kesiswaan' },
-    { id: 'tatatertib', label: 'Tata Tertib' },
-    { id: 'bkk', label: 'BKK & Alumni' },
-    { id: 'tka', label: 'TKA Kemendikdasmen', badge: 'Resmi' },
+    { id: 'bkk', label: 'BKK & Karir' },
+    { 
+      id: 'tka-external', 
+      label: 'TKA Kemendikdasmen', 
+      badge: 'Resmi', 
+      externalUrl: 'https://tka.kemendikdasmen.go.id/' 
+    },
     { id: 'berita', label: 'Berita' },
     { id: 'kontak', label: 'Kontak' },
   ];
 
-  const handleNavClick = (tabId: string) => {
-    setActiveTab(tabId);
+  const handleNavClick = (target: string | { id: string; externalUrl?: string }) => {
+    if (typeof target !== 'string' && target.externalUrl) {
+      window.open(target.externalUrl, '_blank', 'noopener,noreferrer');
+      setMobileMenuOpen(false);
+      return;
+    }
+    const targetId = typeof target === 'string' ? target : target.id;
+    setActiveTab(targetId);
     setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -153,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   id={`nav-link-${link.id}`}
-                  onClick={() => handleNavClick(link.id)}
+                  onClick={() => handleNavClick(link)}
                   className={`relative px-3 py-2 text-xs font-semibold rounded-xl transition-all ${
                     isActive
                       ? 'text-blue-700 bg-blue-50 font-bold shadow-xs'
@@ -162,8 +173,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <span className="flex items-center gap-1.5">
                     {link.label}
+                    {link.externalUrl && <ExternalLink className="w-3 h-3 opacity-70" />}
                     {link.badge && (
-                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-white animate-pulse">
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500 text-white">
                         {link.badge}
                       </span>
                     )}
@@ -272,14 +284,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     key={link.id}
                     id={`mobile-nav-${link.id}`}
-                    onClick={() => handleNavClick(link.id)}
+                    onClick={() => handleNavClick(link)}
                     className={`flex items-center justify-between w-full px-4 py-2.5 text-xs font-semibold rounded-xl text-left transition-colors ${
                       isActive
                         ? 'bg-blue-600 text-white font-bold shadow-xs'
                         : 'text-slate-700 hover:bg-slate-100'
                     }`}
                   >
-                    <span>{link.label}</span>
+                    <span className="flex items-center gap-2">
+                      {link.label}
+                      {link.externalUrl && <ExternalLink className="w-3.5 h-3.5 opacity-70" />}
+                    </span>
                     {link.badge && (
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         isActive ? 'bg-white text-blue-700' : 'bg-amber-100 text-amber-800'
