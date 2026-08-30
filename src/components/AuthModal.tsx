@@ -48,37 +48,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   if (!isOpen) return null;
 
   // Real Google Sign-In via Supabase OAuth
-  const handleGoogleSignIn = async () => {
+  const handleGoogleLogin = async () => {
     setGoogleLoading(true);
     setErrorMsg(null);
-    setSuccessMsg(null);
-
-    try {
-      // 1. Request OAuth authorization from Supabase for Google provider
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'select_account',
-          }
-        }
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch (err: any) {
-      console.warn('Google Auth notice:', err);
-      setErrorMsg(err.message || 'Gagal memulai login Google. Pastikan Client ID & Secret sudah terpasang di Supabase.');
-    } finally {
-      setGoogleLoading(false);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+    if (error) {
+      console.error('Error logging in:', error.message);
+      setErrorMsg(error.message);
     }
+    setGoogleLoading(false);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -283,7 +266,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 id="btn-google-signin"
                 type="button"
-                onClick={handleGoogleSignIn}
+                onClick={handleGoogleLogin}
                 disabled={googleLoading}
                 className="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm rounded-2xl border-2 border-slate-200 shadow-sm hover:border-slate-300 transition-all flex items-center justify-center gap-3 group active:scale-98 disabled:opacity-50"
               >

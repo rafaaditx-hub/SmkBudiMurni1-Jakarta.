@@ -49,8 +49,26 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Listen to Supabase Auth changes
+  // Listen to Supabase Auth changes and check initial session
   useEffect(() => {
+    // Check initial session (especially after OAuth redirect)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const metadata = session.user.user_metadata || {};
+        const profile: UserProfile = {
+          id: session.user.id,
+          email: session.user.email || '',
+          fullName: metadata.full_name || metadata.name || session.user.email?.split('@')[0] || 'User',
+          role: metadata.role || 'siswa',
+          major: metadata.major || 'TKJ',
+          nisnOrNip: metadata.nisn || metadata.sub || '2026-BM1',
+          avatarUrl: metadata.avatar_url || metadata.picture || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+        };
+        setCurrentUser(profile);
+        localStorage.setItem('bm1_user_profile', JSON.stringify(profile));
+      }
+    });
+
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         const metadata = session.user.user_metadata || {};
